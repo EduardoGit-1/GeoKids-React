@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
-import MapLogo from './Logos/MapLogo'
-import UploadLogo from './Logos/UploadLogo'
-import FavoritesLogo from './Logos/FavoritesLogo'
-import TrackingLogo from './Logos/TrackingLogo'
+import {View, Text, StyleSheet, Image, KeyboardAvoidingView} from 'react-native';
+import MapLogo from '../Logos/MapLogo'
+import UploadLogo from '../Logos/UploadLogo'
+import FavoritesLogo from '../Logos/FavoritesLogo'
+import TrackingLogo from '../Logos/TrackingLogo'
 const Header = ({title}) => {
     let logoWidth = 55
     let logoHeight = 55
@@ -33,7 +33,7 @@ const Header = ({title}) => {
 const styles = StyleSheet.create({
     header: {
         width: '100%',
-        height : '15%',
+        height : '13%',
         padding : 25,
         borderColor: '#EBEBEB',
         backgroundColor: '#F1F1F1',

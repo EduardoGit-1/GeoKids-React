@@ -10,7 +10,7 @@ export default Sidebar = props =>{
         <ScrollView style={styles.scrollView}>
             <View style = {styles.header}>
                 <Text style = {styles.title}>MENU</Text>
-                <Image style = {styles.profile} source = {require('../assets/characterTeste.png')}/>
+                <Image style = {styles.profile} source = {require('../../assets/characterTeste.png')}/>
                 <Text style = {styles.nickname}>Eduardo</Text>
             </View>
             <View style = {styles.container}>

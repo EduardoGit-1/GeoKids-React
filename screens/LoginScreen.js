@@ -2,16 +2,17 @@ import React, { useState } from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 import Character from '../components/Login/SelectCharacter/Character'
 import InsertNickname from '../components/Login/InsertNickName/InsertNickname'
-import BackGround from '../components/BackGround'
+import BackGround from '../components/Common/BackGround'
 import MapScreen from './MapScreen'
 import { NavigationContainer } from '@react-navigation/native';
 import UploadScreen from './UploadScreen'
 import TrackingScreen from './TrackingScreen'
 import FavoriteScreen from './FavoriteScreen'
+import Navigator from '../components/Navigation/Navigator'
 
 const Login = ({Drawer}) =>{
     const [step, setStep] = useState(1)
-    const [character, setCharacter] = useState(null)
+    const [character, setCharacter] = useState(0)
     const [nickname, setNickname] = useState('')
 
     var state = {
@@ -28,18 +29,10 @@ const Login = ({Drawer}) =>{
                 return <Character state = {state} setCharacter = {setCharacter} setStep = {setStep}/>
         }
     }
-
-    let currentForm = selectForm(step)
     if(step === 3){
         return (    
-        <NavigationContainer>
-            <Drawer.Navigator initialRouteName="Mapa">
-                <Drawer.Screen name="Mapa" component={MapScreen} />
-                <Drawer.Screen name="Uploads" component={UploadScreen} />
-                <Drawer.Screen name="Tracking" component={TrackingScreen} />
-                <Drawer.Screen name="Favoritos" component={FavoriteScreen} />
-            </Drawer.Navigator>
-        </NavigationContainer>)
+            <Navigator Drawer = {Drawer}/>
+        )
     }
     return(
         <View style = {styles.index}>
@@ -47,7 +40,7 @@ const Login = ({Drawer}) =>{
             <View style= {styles.logo}>
                     <Image styles = {styles.logo} source ={require('../assets/logos/geoKidsLogoLogin.png')}/>
             </View>
-                {currentForm}
+                {selectForm(step)}
         </View>
     )
 }

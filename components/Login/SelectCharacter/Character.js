@@ -1,21 +1,15 @@
 import React, { useState } from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
-import { AntDesign } from '@expo/vector-icons'; 
-import PreviousButton from '../../PreviousButton'
-import NextButton from '../../NextButton'
-import PreviousArrow from '../../PreviousArrow'
-import NextArrow from '../../NextArrow'
+import PreviousButton from '../../Common/PreviousButton'
+import NextButton from '../../Common/NextButton'
+import PreviousArrow from '../../Common/PreviousArrow'
+import NextArrow from '../../Common/NextArrow'
+import {characters} from '../../../assets/login/characters/Characters'
 
 var imgID = 0
-const character1 = require('../../../assets/login/characters/character1.png')
-const character2 = require('../../../assets/login/characters/character2.png')
-const character3 = require('../../../assets/login/characters/character3.png')
-const character4 = require('../../../assets/login/characters/character4.png')
-const characters = [character1, character2, character3, character4]
-
 const Character = ({state, setCharacter, setStep}) =>{
-    const [imgSrc, setImgSrc] = useState(characters[imgID])
-    const [show, setShow] = useState(true)
+    const [imgSrc, setImgSrc] = useState(characters[state.character])
+    const [isArrowVisible, setArrowVisible] = useState(true)
     console.log(state)
     const nextImg = () =>{
         imgID += 1
@@ -38,9 +32,8 @@ const Character = ({state, setCharacter, setStep}) =>{
     }
 
     const selectImage = () =>{
-        setShow(!show)
-        setCharacter(characters[imgID])
-        console.log(show)
+        setArrowVisible(!isArrowVisible)
+        setCharacter(imgID)
     }
     const previousForm = () =>{
         setStep(state.step - 1)
@@ -62,7 +55,7 @@ const Character = ({state, setCharacter, setStep}) =>{
     const rightArrow = (show) =>{
         if(show === true){
             return(
-            <TouchableOpacity  onPress={nextImg}>
+            <TouchableOpacity onPress={nextImg}>
                 <NextArrow width = {27} height = {27} />
             </TouchableOpacity>
             )
@@ -71,9 +64,8 @@ const Character = ({state, setCharacter, setStep}) =>{
         }
     }
 
-    let left = leftArrow(show);
-    let right = rightArrow(show);
-
+    let left = leftArrow(isArrowVisible);
+    let right = rightArrow(isArrowVisible);
     return(
         <View style = {styles.container}>
             <Text style={styles.title}>Escolhe o teu boneco!</Text>
@@ -85,14 +77,16 @@ const Character = ({state, setCharacter, setStep}) =>{
                 {right}
             </View>
             <View style = {styles.buttonContainer}>
-                <TouchableOpacity style = {{alignItems : 'center',flexDirection: 'row', marginRight: 40}} onPress = {previousForm}>
+                <TouchableOpacity style = {[styles.formStepArrow, !isArrowVisible ? {marginRight:'10%'} : {marginRight:'48.5%'}]}
+                 onPress = {previousForm}>
                     <PreviousButton width = {27} height = {27} />
                     <Text style = {styles.buttonText}>Anterior</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style = {{alignItems : 'center',flexDirection: 'row'}} onPress = {nextForm}>
+                <TouchableOpacity style = {[styles.formStepArrow, !isArrowVisible ? styles.visible : styles.notVisible]} 
+                onPress = {nextForm}>
                     <Text style = {styles.buttonText}>Próximo</Text>
                     <NextButton width = {27} height = {27} />
-                </TouchableOpacity>
+                </TouchableOpacity> 
             </View>
         </View>
     )
@@ -120,22 +114,30 @@ const styles = StyleSheet.create({
     character:{
         width: 50, 
         height: 170,
-        //borderRadius: 50/ 2
     },
     title:{
-        
         fontFamily : 'Lexa-Mega',
         fontSize : 18,
         textAlign: 'center'
     },
     buttonContainer:{
         flexDirection : 'row',
-        justifyContent: 'space-between'
     },
     buttonText: {
         fontFamily : 'Lexa-Mega',
         fontSize : 12,
         padding: 10
+    },
+    formStepArrow: {
+        flexDirection: 'row',
+        alignItems : 'center',
+   
+    },
+    visible:{
+        display:'flex',
+    },
+    notVisible:{
+        display:'none'
     }
 })
 

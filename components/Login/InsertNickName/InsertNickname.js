@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import {View, Text, StyleSheet, Image, TextInput, Button} from 'react-native';
 import NickNameIcon from './Icons/NickNameIcon'
-import NextButton from '../../NextButton'
+import NextButton from '../../Common/NextButton'
 import { AntDesign } from '@expo/vector-icons'; 
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 const InsertNickname = ({state, setNickname, setStep}) =>{
-    const [text, onChangeText] = React.useState('');
-    const previousForm = () =>{
-        setStep(state.step - 1)
+    const onChangeText = textValue =>{
+        setNickname(textValue);
     }
     const nextForm = () =>{
         setStep(state.step + 1)
@@ -20,8 +19,8 @@ const InsertNickname = ({state, setNickname, setStep}) =>{
             <Text style={styles.title}>Escolhe um nickname divertido:</Text>
             <TextInput
             style={styles.nickNameInput}
-            onChangeText={text => onChangeText(text)}
-            value={text}/>
+            onChangeText={onChangeText}
+            />
             <View style = {{alignSelf: 'flex-end',marginRight : 30}}>
                 <TouchableOpacity style = {{alignItems : 'center',flexDirection: 'row'}} onPress = {nextForm}>
                     <Text style = {styles.buttonText}>Próximo</Text>
@@ -50,7 +49,8 @@ const styles = StyleSheet.create({
         height : 34,
         backgroundColor : '#FFFFFF',
         opacity: 0.7,
-        borderRadius : 10
+        borderRadius : 10,
+        fontFamily : 'Lexa-Mega'
     },
     title:{
         fontFamily : 'Lexa-Mega',

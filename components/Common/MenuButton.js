@@ -38,8 +38,8 @@ const MenuButton = ({width, height, navigation}) =>{
 const styles = StyleSheet.create({
     buttonContainer:{
         alignSelf:'flex-start',
-            marginTop : 30,
-            marginLeft : 30,
+        marginTop : 20,
+        marginLeft : 20,
         // alignItems : 'center',
         //alignSelf: 'flex-start',
     },
