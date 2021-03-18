@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
-import Character from '../components/Login/SelectCharacter/Character'
+import Character from '../components/Login/SelectCharacter/SelectCharacter'
 import InsertNickname from '../components/Login/InsertNickName/InsertNickname'
 import BackGround from '../components/Common/BackGround'
 import MapScreen from './MapScreen'

@@ -18,6 +18,7 @@ const Character = ({state, setCharacter, setStep}) =>{
             imgID = 0
         }
         setImgSrc(characters[imgID])
+        setCharacter(imgID)
     }
 
     const previousImg = () =>{
@@ -29,6 +30,7 @@ const Character = ({state, setCharacter, setStep}) =>{
         }
 
         setImgSrc(characters[imgID])
+        setCharacter(imgID)
     }
 
     const selectImage = () =>{
