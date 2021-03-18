@@ -2,13 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, Image, View, Alert} from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions'
+import envs from '../../config/env'
+import {LATITUDE_DELTA, LONGITUDE_DELTA} from '../../constants/screenSize'
 
-const CONTAINER_HEIGHT = 480
-const CONTAINER_WIDTH = 300
-const ASPECT_RATIO = CONTAINER_HEIGHT / CONTAINER_WIDTH
-const LATITUDE_DELTA = 0.0922
-const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
-const API_KEY = 'AIzaSyCM7K4DnUmRJVGMwVWs9yxSQgGydHAtWVg'
+const {GOOGLE_API_KEY} = envs
 const GoogleMaps = ({setDestination, region, setRegion, destination, isTracking}) =>{
     const [initialRegion, setInitialRegion] = useState(null)
     const onMapPress = (e) =>{
@@ -25,6 +22,7 @@ const GoogleMaps = ({setDestination, region, setRegion, destination, isTracking}
     const onRegionChangeComplete = () =>{
         setRegion(null)
     }
+
     useEffect(() =>{
         const findCoordinates = () =>{
             navigator.geolocation.getCurrentPosition(
@@ -62,7 +60,7 @@ const GoogleMaps = ({setDestination, region, setRegion, destination, isTracking}
                         [<MapViewDirections 
                             origin = {initialRegion}
                             destination = {destination}
-                            apikey = {API_KEY}
+                            apikey = {GOOGLE_API_KEY}
                             strokeWidth = {4}
                             strokeColor='#FF7A7A'
                             mode = 'WALKING'

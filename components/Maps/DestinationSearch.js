@@ -1,13 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, TextInput, Image, View, Alert} from 'react-native';
+import { StyleSheet, Dimensions, Image, View, Alert} from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import PlaceRow from './PlaceRow'
+import {ASPECT_RATIO} from '../../constants/screenSize'
+import envs from '../../config/env'
 
-const API_KEY = 'AIzaSyCM7K4DnUmRJVGMwVWs9yxSQgGydHAtWVg'
-const CONTAINER_HEIGHT = 480
-const SCREEN_WIDTH = 300
-const ASPECT_RATIO = CONTAINER_HEIGHT / SCREEN_WIDTH
+const {GOOGLE_API_KEY} = envs
 const DestinationSearch = ({setRegion}) =>{
     return(
         <View styles = {styles.container}>
@@ -29,12 +28,11 @@ const DestinationSearch = ({setRegion}) =>{
                 suppressDefaultStyles
                 styles={{
                 textInput: styles.textInput,
-                    
                 separator: styles.separator,
                 }}
                 fetchDetails
                 query={{
-                key: API_KEY,
+                key: GOOGLE_API_KEY,
                 language: 'pt',
                 components: 'country:pt'
                 }}
