@@ -1,17 +1,18 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import {View, Text, StyleSheet, ScrollView,Image} from 'react-native'
 import {DrawerItem, DrawerItemList} from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
-
-
+import {GlobalContext} from '../../context/Provider'
 
 export default Sidebar = props =>{
+    const {authState:{user}} = useContext(GlobalContext)
+    console.log(user)
     return(
         <ScrollView style={styles.scrollView}>
             <View style = {styles.header}>
                 <Text style = {styles.title}>MENU</Text>
                 <Image style = {styles.profile} source = {require('../../assets/characterTeste.png')}/>
-                <Text style = {styles.nickname}>Eduardo</Text>
+                <Text style = {styles.nickname}>{user.nickname}</Text>
             </View>
             <View style = {styles.container}>
                 <DrawerItemList {...props}/>
@@ -35,9 +36,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#E6EEF9'
     },
     profile:{
-        width : 100,
-        height : 100,
-        borderRadius:50,
+        width : 120,
+        height : 120,
+        borderRadius:60,
         borderWidth:3,
         borderColor: "black"
     },
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
         // margin: 15,
         color : '#FF7A7A',
         fontFamily : 'Lexa-Mega',
-        fontSize: 30,
+        fontSize: 35,
         
     }
 })

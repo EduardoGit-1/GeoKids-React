@@ -1,6 +1,6 @@
 
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Dimensions, Image, View, Alert} from 'react-native';
+import React from 'react';
+import { StyleSheet, View,} from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import PlaceRow from './PlaceRow'
 import {ASPECT_RATIO} from '../../constants/screenSize'

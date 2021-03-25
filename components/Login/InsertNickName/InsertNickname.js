@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {View, Text, StyleSheet, Image, TextInput, Button} from 'react-native';
 import NickNameIcon from './Icons/NickNameIcon'
 import NextButton from '../../Common/NextButton'
-import { AntDesign } from '@expo/vector-icons'; 
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
@@ -50,13 +49,13 @@ const styles = StyleSheet.create({
         backgroundColor : '#FFFFFF',
         opacity: 0.7,
         borderRadius : 10,
-        fontFamily : 'Lexa-Mega'
+        fontFamily : 'Lexa-Mega',
+        textAlign: 'center'
     },
     title:{
         fontFamily : 'Lexa-Mega',
         fontSize : 18,
         textAlign: 'center'
-        
     },
     buttonText: {
         fontFamily : 'Lexa-Mega',

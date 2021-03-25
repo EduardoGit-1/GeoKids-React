@@ -1,7 +1,9 @@
 export default {
     isLoggedIn : false,
     user : {
-        selectedCharacter : null,
+        id: null,
+        characterID : null,
         nickname : ''
-    }
+    },
+    error: null
 }

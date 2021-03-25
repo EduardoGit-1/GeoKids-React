@@ -1,42 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 import Character from '../components/Login/SelectCharacter/SelectCharacter'
 import InsertNickname from '../components/Login/InsertNickName/InsertNickname'
 import BackGround from '../components/Common/BackGround'
-import MapScreen from './MapScreen'
-import { NavigationContainer } from '@react-navigation/native';
-import UploadScreen from './UploadScreen'
-import TrackingScreen from './TrackingScreen'
-import FavoriteScreen from './FavoriteScreen'
 import Navigator from '../components/Navigation/Navigator'
+import axios from '../helpers/axiosInstance';
+import register from '../context/actions/auth/register'
+import WarningModal from '../components/Common/WarningModal';
+import {GlobalContext} from '../context/Provider'
 
 const Login = ({Drawer}) =>{
     const [step, setStep] = useState(1)
-    const [character, setCharacter] = useState(0)
+    const [characterID, setCharacterID] = useState(0)
     const [nickname, setNickname] = useState('')
+    const [modalVisible, setModalVisible] = useState(false)
+    const {authDispatch, authState:{isLoggedIn}} = useContext(GlobalContext)
 
+    const handleSignUpError = () =>{
+        setModalVisible(!modalVisible)
+        setStep(step - 1)
+    }
+    const signUp = () =>{
+        register({nickname, characterID})(authDispatch, setModalVisible)
+    }
     var state = {
                 step: step,
-                character : character,
+                characterID : characterID,
                 nickname : nickname
-            }
+    }
     let selectForm = (step) => {
         switch(step){
             case 1:
                 return <InsertNickname state = {state} setNickname = {setNickname} setStep = {setStep}/>
                 
             case 2:
-                return <Character state = {state} setCharacter = {setCharacter} setStep = {setStep}/>
+                return <Character state = {state} setCharacter = {setCharacterID} setStep = {setStep} signUp = {signUp}/>
+            
         }
     }
-    if(step === 3){
-        return (    
-            <Navigator Drawer = {Drawer}/>
-        )
+    if(step === 3 && isLoggedIn){
+        return <Navigator Drawer = {Drawer}/>
     }
+
+
     return(
         <View style = {styles.index}>
             <BackGround/>
+            <WarningModal 
+                text = "A alcunha já está a ser usada!"
+                modalVisible = {modalVisible} 
+                onClose = {handleSignUpError}
+                />
             <View style= {styles.logo}>
                     <Image styles = {styles.logo} source ={require('../assets/logos/geoKidsLogoLogin.png')}/>
             </View>

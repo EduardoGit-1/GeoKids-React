@@ -5,12 +5,14 @@ import NextButton from '../../Common/NextButton'
 import PreviousArrow from '../../Common/PreviousArrow'
 import NextArrow from '../../Common/NextArrow'
 import {characters} from '../../../assets/login/characters/Characters'
+import axiosInstance from '../../../helpers/axiosInstance'
 
 var imgID = 0
-const Character = ({state, setCharacter, setStep}) =>{
-    const [imgSrc, setImgSrc] = useState(characters[state.character])
+const Character = ({state, setCharacter, setStep, signUp}) =>{
+    const [imgSrc, setImgSrc] = useState(characters[state.characterID])
     const [isArrowVisible, setArrowVisible] = useState(true)
-    console.log(state)
+    
+    
     const nextImg = () =>{
         imgID += 1
         console.log("Next image: " + imgID)
@@ -41,7 +43,7 @@ const Character = ({state, setCharacter, setStep}) =>{
         setStep(state.step - 1)
     }
     const nextForm = () =>{
-        setStep(state.step + 1)
+        signUp()
     }
 
     const leftArrow = (show) =>{

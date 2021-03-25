@@ -2,7 +2,7 @@ import {DEV_BACKEND_URL, GOOGLE_API_KEY} from '@env'
 
 const devEnironmentVariables = {
     DEV_BACKEND_URL,
-    GOOGLE_API_KEY
+    GOOGLE_API_KEY,
 }
 
 const prodEnvironmentVariables = {
