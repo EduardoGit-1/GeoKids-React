@@ -3,6 +3,7 @@ import {View, Text, StyleSheet, Image, StatusBar} from 'react-native';
 import BackGround from '../components/Common/BackGround'
 import Header from '../components/Common/Header'
 import MenuButton from '../components/Common/MenuButton'
+import Example from '../components/Example';
 
 const UploadScreen = ({navigation}) =>{
     return(

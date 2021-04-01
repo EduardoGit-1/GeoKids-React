@@ -15,7 +15,6 @@ const Login = ({Drawer}) =>{
     const [nickname, setNickname] = useState('')
     const [modalVisible, setModalVisible] = useState(false)
     const {authDispatch, authState:{isLoggedIn}} = useContext(GlobalContext)
-
     const handleSignUpError = () =>{
         setModalVisible(!modalVisible)
         setStep(step - 1)
@@ -38,7 +37,7 @@ const Login = ({Drawer}) =>{
             
         }
     }
-    if(step === 3 && isLoggedIn){
+    if(step === 3 || isLoggedIn){
         return <Navigator Drawer = {Drawer}/>
     }
 

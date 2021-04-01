@@ -6,7 +6,7 @@ import {GlobalContext} from '../../context/Provider'
 
 export default Sidebar = props =>{
     const {authState:{user}} = useContext(GlobalContext)
-    console.log(user)
+    //console.log(user)
     return(
         <ScrollView style={styles.scrollView}>
             <View style = {styles.header}>

@@ -1,9 +1,10 @@
 import axios from '../../../helpers/axiosInstance';
+import {REGISTER_USER} from '../../../constants/endpoints'
 
 const register = ({nickname, characterID}) => 
     (dispatch, setModalVisible) =>{
         console.log(`Nickname ${nickname}, characterID: ${characterID}`)
-        axios.post('auth/signup', {
+        axios.post(REGISTER_USER, {
             nickname : nickname,
             characterID : characterID
         })

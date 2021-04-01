@@ -1,72 +1,94 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, Image, View, Alert} from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker, Polyline } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions'
+import {mapStyle} from '../../constants/mapStyle'
 import envs from '../../config/env'
 import {LATITUDE_DELTA, LONGITUDE_DELTA} from '../../constants/screenSize'
 
 const {GOOGLE_API_KEY} = envs
-const GoogleMaps = ({setDestination, region, setRegion, destination, isTracking}) =>{
-    const [initialRegion, setInitialRegion] = useState(null)
-    const onMapPress = (e) =>{
-        if(isTracking === true){
-            setDestination({
+const GoogleMaps = ({setDestination, currentPosition, region, setRegion, destination, isTracking, setCurrentPosition, setIsMoving, setDistance, onMapPress}) =>{
+
+    const onPoiClick = e =>{
+        console.log(e.nativeEvent)
+        setDestination({
+            designation: e.nativeEvent.name,
+            latitude: e.nativeEvent.coordinate.latitude,
+            longitude: e.nativeEvent.coordinate.longitude,
+            latitudeDelta: LATITUDE_DELTA,
+            longitudeDelta: LONGITUDE_DELTA,
+        })
+    }
+
+    const onUserLocationChange = (e) =>{
+            let location = {
                 latitude: e.nativeEvent.coordinate.latitude,
                 longitude: e.nativeEvent.coordinate.longitude,
-                latitudeDelta: LATITUDE_DELTA,
-                longitudeDelta: LONGITUDE_DELTA,
-            })
-        }
+                // latitudeDelta: LATITUDE_DELTA,
+                // longitudeDelta: LONGITUDE_DELTA,
+                latitudeDelta: 0.002,
+                longitudeDelta: 0.002,
+            }
+            setCurrentPosition(location)
+            if(isTracking){setRegion(location)}
+            
+        
     }
 
     const onRegionChangeComplete = () =>{
         setRegion(null)
     }
 
-    useEffect(() =>{
-        const findCoordinates = () =>{
-            navigator.geolocation.getCurrentPosition(
-                position => {
-                    var lat = parseFloat(position.coords.latitude)
-                    var long = parseFloat(position.coords.longitude)
-                    setInitialRegion({
-                        latitude: lat,
-                        longitude: long,
-                        latitudeDelta: LATITUDE_DELTA,
-                        longitudeDelta: LONGITUDE_DELTA,
-                    });
-                },
-                error => Alert.alert(error.message),
-                { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-            );
-        };
-        findCoordinates()       
-    })
 
-    if(initialRegion === null){
+
+    if(currentPosition === null){
         return <Text>Loading</Text>
     }else{
         return(
-            <MapView style = {styles.map} 
+            <MapView style = {styles.map}
+                customMapStyle = {mapStyle} 
                 provider = {MapView.PROVIDER_GOOGLE}
-                initialRegion={initialRegion}
+                initialRegion={currentPosition}
                 region = {region}
+                // animateToRegion = {region}
+                showsUserLocation = {true}
+                followsUserLocation = {isTracking}
+                onUserLocationChange={onUserLocationChange}
                 onRegionChangeComplete = {onRegionChangeComplete}
+                onPoiClick = {onPoiClick}
                 onPress = {onMapPress}>
-                    <Marker
-                        coordinate = {initialRegion}   
-                    />
-                    {destination != null && isTracking ?
-                        [<MapViewDirections 
-                            origin = {initialRegion}
-                            destination = {destination}
-                            apikey = {GOOGLE_API_KEY}
-                            strokeWidth = {4}
-                            strokeColor='#FF7A7A'
-                            mode = 'WALKING'
-                        />,
-                        <Marker coordinate = {destination}/>]
-                        :null
+                    {destination != null && isTracking === false ?
+                        [
+                            <MapViewDirections 
+                                key = {1}
+                                origin = {currentPosition}
+                                destination = {destination}
+                                apikey = {GOOGLE_API_KEY}
+                                strokeWidth = {4}
+                                strokeColor='#FF7A7A'
+                                mode = 'WALKING'
+                                language = "pt"
+                            />,
+                            <Marker key = {2} coordinate = {destination} onPress = {() => {setDestination(null)}}/>,
+                        ]
+                        : destination != null && isTracking ?
+                            [
+                                <MapViewDirections 
+                                key = {1}
+                                style = {{display: 'none'}}
+                                origin = {currentPosition}
+                                destination = {destination}
+                                apikey = {GOOGLE_API_KEY}
+                                strokeWidth = {4}
+                                strokeColor='#FF7A7A'
+                                mode = 'WALKING'
+                                onReady = {result =>{setDistance(result.distance); setIsMoving(true)}}
+                                />,
+                                <Marker key = {2} coordinate = {destination}/>,
+                            ]
+                            
+                        :
+                            null
                     }
             </MapView>
         )
