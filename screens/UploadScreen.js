@@ -3,7 +3,7 @@ import {View, Text, StyleSheet, Image, StatusBar} from 'react-native';
 import BackGround from '../components/Common/BackGround'
 import Header from '../components/Common/Header'
 import MenuButton from '../components/Common/MenuButton'
-import Example from '../components/Example';
+import CustomMarker from '../components/Maps/CustomMarker';
 
 const UploadScreen = ({navigation}) =>{
     return(
@@ -12,6 +12,7 @@ const UploadScreen = ({navigation}) =>{
             <BackGround/>
             <Header title ="UPLOADS"/>
             <MenuButton width = '40' height = '40' navigation = {navigation}/>
+            <CustomMarker/>
         </View>
     )
 }

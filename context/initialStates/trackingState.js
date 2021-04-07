@@ -5,3 +5,8 @@ export const initialPursuitState = {
     distance : null,
     isDone: false
 }
+
+export const initialRouteState = {
+    routes : [],
+    error: null,
+}

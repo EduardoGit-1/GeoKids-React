@@ -14,7 +14,7 @@ const Header = ({title}) => {
                 return(<MapLogo width = {logoWidth + 5} height = {logoHeight + 5}/>)
             case 'UPLOADS':
                 return(<UploadLogo width = {logoWidth} height = {logoWidth}/>)
-            case 'TRACKING':
+            case 'PERCURSOS':
                 return(<TrackingLogo width = {logoWidth} height = {logoHeight}/>)
             case 'FAVORITOS':
                 return(<FavoritesLogo width = {logoWidth - 5} height = {logoHeight- 5}/>)

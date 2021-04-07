@@ -57,6 +57,9 @@ const GoogleMaps = ({setDestination, currentPosition, region, setRegion, destina
                 onRegionChangeComplete = {onRegionChangeComplete}
                 onPoiClick = {onPoiClick}
                 onPress = {onMapPress}>
+                    {/* <Marker coordinate = {currentPosition}>
+                            <Image style = {styles.customMarker} source = {require('../../assets/characterTeste.png')}/>
+                    </Marker>  */}
                     {destination != null && isTracking === false ?
                         [
                             <MapViewDirections 
@@ -104,6 +107,14 @@ const styles = StyleSheet.create({
     },
     map:{
         ...StyleSheet.absoluteFillObject
+    },
+    customMarker:{
+        width: 40, 
+        height: 40, 
+        borderRadius: 40/ 2,
+        borderWidth: 2,
+        borderColor: 'black',
+        
     }
 })
 

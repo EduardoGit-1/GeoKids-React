@@ -1,20 +1,22 @@
 import axios from '../../../helpers/axiosInstance';
-import {REGISTER_ROUTE} from '../../../constants/endpoints'
+import {GET_ROUTES} from '../../../constants/endpoints'
 
-const registerRoute = pursuitState => (dispatch) =>{
-    axios.post(REGISTER_ROUTE, pursuitState)
+const getRoutes = (userID) => (dispatch) =>{
+    console.log(userID)
+    axios.post(GET_ROUTES, {userID})
     .then((response) => {
         dispatch({
-            type: 'REGISTER_SUCCESS',
+            type: 'GET_ROUTES_SUCCESS',
             payload: response.data,
         });
+        console.log(response.data)
     })
     .catch((err) => {
         dispatch({
-            type: 'REGISTER_FAIL',
+            type: 'GET_ROUTES_FAIL',
             payload: err.response ? err.response.data : {error: 'Something went wrong, try agin'},
         });
     });
 }
 
-export default registerRoute
+export default getRoutes

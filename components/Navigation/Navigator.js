@@ -25,7 +25,7 @@ const Navigator = ({Drawer}) => {
             <UploadLogo width ={50} height = {50}/>
           )
         }}/>
-        <Drawer.Screen name="Tracking" component={TrackingScreen} options ={{
+        <Drawer.Screen name="Percursos" component={TrackingScreen} options ={{
           drawerIcon:() => (
             <TrackingLogo width ={50} height = {50}/>
           )

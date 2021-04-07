@@ -5,7 +5,7 @@ import InsertNickname from '../components/Login/InsertNickName/InsertNickname'
 import BackGround from '../components/Common/BackGround'
 import Navigator from '../components/Navigation/Navigator'
 import axios from '../helpers/axiosInstance';
-import register from '../context/actions/auth/register'
+import register from '../context/actions/auth/registerUser'
 import WarningModal from '../components/Common/WarningModal';
 import {GlobalContext} from '../context/Provider'
 

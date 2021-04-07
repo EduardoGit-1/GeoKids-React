@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {View, Text, StatusBar, StyleSheet, TouchableOpacity} from 'react-native';
 import Header from '../components/Common/Header'
 import BackGround from '../components/Common/BackGround'
@@ -12,6 +12,7 @@ import {LATITUDE_DELTA, LONGITUDE_DELTA} from '../constants/screenSize'
 import envs from '../config/env'
 import registerRoute from '../context/actions/tracking/saveRoute';
 import { initialPursuitState } from '../context/initialStates/trackingState';
+import {GlobalContext} from '../context/Provider'
 const {GOOGLE_API_KEY} = envs
 
 Geocoder.init(GOOGLE_API_KEY)
@@ -25,6 +26,7 @@ const MapScreen = ({navigation}) => {
     const [pursuitState, setPursuitState] = useState(initialPursuitState)
     const [startTime, setStartTime] = useState()
     const [endTime, setEndTime] = useState()
+    const {routeDispatch, authState:{user}} = useContext(GlobalContext)
 
     const onMapPress = (e) =>{
         Geocoder.from(e.nativeEvent.coordinate.latitude, e.nativeEvent.coordinate.longitude)
@@ -119,7 +121,7 @@ const MapScreen = ({navigation}) => {
         if(isMoving === true){
             console.log("onReady chamado")
             const pursuit = {...pursuitState}
-            pursuit.distance = distance
+            pursuit.distance = Math.round(distance * 10) / 10
             setPursuitState(pursuit)
         }else{
             setDistance(null)
@@ -131,6 +133,7 @@ const MapScreen = ({navigation}) => {
             let duration = endTime - startTime
             duration /= 1000
             console.log(`StartTime: ${startTime}, EndTime: ${endTime}`)
+            duration = Math.round(duration * 10) / 10
             setPursuitState(prevState => ({
                 // origin: {...prevState.origin},
                 // destination: {...prevState.destination},
@@ -149,7 +152,9 @@ const MapScreen = ({navigation}) => {
 
     useEffect(()=>{
         if(pursuitState.isDone){
-            registerRoute(pursuitState)
+            pursuitState.userID = user.id
+            registerRoute(pursuitState)(routeDispatch)
+            setPursuitState(initialPursuitState)
         }
     }, [pursuitState.isDone])
 
@@ -199,7 +204,7 @@ const styles = StyleSheet.create({
         flex:1,
         alignItems: 'center',
         backgroundColor : "#E0D8D8",
-        overflow: 'hidden'
+        overflow: 'hidden',
     },
     googleMapsContainer:{
         width: '80%',
