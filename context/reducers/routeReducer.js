@@ -13,6 +13,7 @@ const auth = (state, {type, payload}) =>{
                 error: payload
             }
         case 'GET_ROUTES_SUCCESS':
+            console.log(payload)
             return {
                 ...state,
                 routes : payload

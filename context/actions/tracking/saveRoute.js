@@ -1,5 +1,6 @@
 import axios from '../../../helpers/axiosInstance';
 import {REGISTER_ROUTE} from '../../../constants/endpoints'
+import {saveRoute} from '../../storage/AsyncStorage'
 
 const registerRoute = pursuitState => (dispatch) =>{
     axios.post(REGISTER_ROUTE, pursuitState)
@@ -8,6 +9,7 @@ const registerRoute = pursuitState => (dispatch) =>{
             type: 'REGISTER_SUCCESS',
             payload: response.data,
         });
+        saveRoute(response.data)
     })
     .catch((err) => {
         dispatch({

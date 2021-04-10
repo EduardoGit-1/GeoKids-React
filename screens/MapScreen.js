@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect, useContext, useRef} from 'react';
 import {View, Text, StatusBar, StyleSheet, TouchableOpacity} from 'react-native';
 import Header from '../components/Common/Header'
 import BackGround from '../components/Common/BackGround'
@@ -12,13 +12,17 @@ import {LATITUDE_DELTA, LONGITUDE_DELTA} from '../constants/screenSize'
 import envs from '../config/env'
 import registerRoute from '../context/actions/tracking/saveRoute';
 import { initialPursuitState } from '../context/initialStates/trackingState';
+import Animated from 'react-native-reanimated';
+import BottomSheet from 'reanimated-bottom-sheet';
 import {GlobalContext} from '../context/Provider'
+import DirectionsPopUp from '../components/Maps/DirectionsPopUp'
 const {GOOGLE_API_KEY} = envs
 
 Geocoder.init(GOOGLE_API_KEY)
 const MapScreen = ({navigation}) => {
     const [distance, setDistance] = useState()
     const [isMoving, setIsMoving] = useState(false)
+    const [isRouting, setIsRouting] = useState(false)
     const [currentPosition, setCurrentPosition] = useState()
     const [destination, setDestination] = useState()
     const [region, setRegion] = useState()
@@ -27,6 +31,9 @@ const MapScreen = ({navigation}) => {
     const [startTime, setStartTime] = useState()
     const [endTime, setEndTime] = useState()
     const {routeDispatch, authState:{user}} = useContext(GlobalContext)
+
+    const bs = useRef(null);
+    const fall = new Animated.Value(1);
 
     const onMapPress = (e) =>{
         Geocoder.from(e.nativeEvent.coordinate.latitude, e.nativeEvent.coordinate.longitude)
@@ -48,7 +55,24 @@ const MapScreen = ({navigation}) => {
             latitudeDelta: LATITUDE_DELTA,
             longitudeDelta: LONGITUDE_DELTA,
         }))
-
+        bs.current.snapTo(0)
+    }
+    const onPOIClick = e =>{
+        console.log(e.nativeEvent)
+        setDestination({
+            designation: e.nativeEvent.name,
+            placeID : e.nativeEvent.placeId,
+            latitude: e.nativeEvent.coordinate.latitude,
+            longitude: e.nativeEvent.coordinate.longitude,
+            latitudeDelta: LATITUDE_DELTA,
+            longitudeDelta: LONGITUDE_DELTA,
+        })
+        bs.current.snapTo(0)
+    }
+    const onMarkerPress = () =>{
+        setDestination(null)
+        setIsRouting(false)
+        bs.current.snapTo(1)
     }
     //currentPosition
     useEffect(() =>{
@@ -77,7 +101,7 @@ const MapScreen = ({navigation}) => {
             Geocoder.from(currentPosition.latitude, currentPosition.longitude)
             .then((json) => {
                 const {latitude:originLat, longitude: originLong} = currentPosition
-                const {latitude:destinationLat, longitude:destinationLong, designation:destination_address} = destination
+                const {latitude:destinationLat, longitude:destinationLong, designation:destination_address, placeID} = destination
                 var origin_address = json.results[3].formatted_address;
                 setPursuitState({
                     origin : {
@@ -89,6 +113,7 @@ const MapScreen = ({navigation}) => {
                         designation :destination_address,
                         latitude: destinationLat,
                         longitude: destinationLong,
+                        placeID : placeID
                     },
                     duration: null, 
                     distance: null,
@@ -111,12 +136,11 @@ const MapScreen = ({navigation}) => {
             setTrackingOption(false)
             setIsMoving(false)
             setDestination(null)
+            setIsRouting(false)
             console.log("yeeei, chegaste boi")
         }
     }, [distance])
 
-
-    
     useEffect(() =>{
         if(isMoving === true){
             console.log("onReady chamado")
@@ -135,9 +159,6 @@ const MapScreen = ({navigation}) => {
             console.log(`StartTime: ${startTime}, EndTime: ${endTime}`)
             duration = Math.round(duration * 10) / 10
             setPursuitState(prevState => ({
-                // origin: {...prevState.origin},
-                // destination: {...prevState.destination},
-                // distance: {...prevState.distance},
                 ...prevState,
                 duration: duration,
                 isDone : true,
@@ -158,10 +179,23 @@ const MapScreen = ({navigation}) => {
         }
     }, [pursuitState.isDone])
 
+    
+
     const handleTrackingOption = () =>{
         setTrackingOption(!isTracking)
     }
 
+    const onDirectionsClick = () =>{
+        console.log("teste")
+        setIsRouting(true)
+        bs.current.snapTo(1)
+    }
+    const onStartRouteClick = () =>{
+        console.log("yep")
+        setIsRouting(true)
+        setTrackingOption(true)
+        bs.current.snapTo(1)
+    }
     return(
         <View style = {styles.container}>
             <StatusBar hidden />
@@ -170,15 +204,26 @@ const MapScreen = ({navigation}) => {
             <View style = {styles.googleMapsContainer}>
                 <DestinationSearch setRegion = {setRegion}/>
                 <View style = {styles.mapContainer}>
+
+                    <DirectionsPopUp 
+                    ref = {bs} 
+                    fall ={fall}
+                    destination = {destination}
+                    onDirectionsClick= {onDirectionsClick}
+                    onStartRouteClick = {onStartRouteClick}
+                    />
                     <GoogleMaps 
                         isTracking = {isTracking}
                         isMoving = {isMoving}
+                        isRouting = {isRouting}
                         distance = {distance}
                         pursuitState = {pursuitState}
                         region = {region} 
                         destination = {destination}
                         currentPosition = {currentPosition}
                         onMapPress = {onMapPress}
+                        onPOIClick = {onPOIClick}
+                        onMarkerPress = {onMarkerPress}
                         setIsMoving = {setIsMoving}
                         setRegion = {setRegion}
                         setCurrentPosition = {setCurrentPosition} 
@@ -187,15 +232,11 @@ const MapScreen = ({navigation}) => {
                         setPursuitState = {setPursuitState}
                         setDistance = {setDistance}
                         />
+
                 </View>
             </View>
-            <MenuButton width = '40' height = '40' navigation = {navigation}/>
-            <View style = {{position:'absolute', bottom: 20}}>
-                <TouchableOpacity style = {{alignItems: 'center'}} onPress = {handleTrackingOption}>
-                    <MapLogo width = {45} height = {45}/>
-                    {isTracking ? <Text style = {styles.text}>Parar</Text> : <Text style = {styles.text}>Começar</Text>}
-                </TouchableOpacity>
-            </View>
+            <MenuButton width = '35' height = '35' navigation = {navigation}/>
+
         </View>
     )
 }
@@ -238,7 +279,7 @@ const styles = StyleSheet.create({
     },
     text:{
         fontFamily: 'Lexa-Mega'
-    }
+    },
 
 
 })

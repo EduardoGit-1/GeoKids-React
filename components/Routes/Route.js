@@ -8,8 +8,8 @@ import DurationIcon from '../Icons/DurationIcon'
 import TrackIcon from '../Icons/TrackIcon'
 import envs from '../../config/env'
 const {GOOGLE_API_KEY} = envs
-const Route = ({origin, destination, distance, duration}) =>{
 
+const Route = ({origin, destination, distance, duration}) =>{
     return (
         <View style = {styles.container}>
             <Text style = {styles.title}>Percurso efetuado:</Text>
@@ -50,11 +50,11 @@ const Route = ({origin, destination, distance, duration}) =>{
                 <View style = {styles.routeDetailsContainer}>
                     <View style = {styles.pathContainer}>
                         <DurationIcon width = {26} height = {26}/>
-                        <Text style = {styles.text}>{duration} seg</Text>
+                        <Text style = {styles.text}>{duration} seg.</Text>
                     </View>
                     <View style = {[styles.pathContainer, {marginLeft: 0}]}>
                         <DistanceIcon width = {26} height = {26}/>
-                        <Text style = {styles.text}>{distance} metros</Text>
+                        <Text style = {styles.text}>{distance} m.</Text>
                     </View>
                 </View>
             </View>

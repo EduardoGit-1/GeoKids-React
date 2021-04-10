@@ -1,13 +1,13 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 import Character from '../components/Login/SelectCharacter/SelectCharacter'
 import InsertNickname from '../components/Login/InsertNickName/InsertNickname'
 import BackGround from '../components/Common/BackGround'
 import Navigator from '../components/Navigation/Navigator'
-import axios from '../helpers/axiosInstance';
 import register from '../context/actions/auth/registerUser'
 import WarningModal from '../components/Common/WarningModal';
 import {GlobalContext} from '../context/Provider'
+import {loadUser, removeUser} from '../context/storage/AsyncStorage'
 
 const Login = ({Drawer}) =>{
     const [step, setStep] = useState(1)
@@ -15,6 +15,13 @@ const Login = ({Drawer}) =>{
     const [nickname, setNickname] = useState('')
     const [modalVisible, setModalVisible] = useState(false)
     const {authDispatch, authState:{isLoggedIn}} = useContext(GlobalContext)
+    useEffect(() =>{
+        loadUser().then(authState => 
+                authDispatch({type:'LOGIN', payload: authState})
+            )
+    }, [])
+    // removeUser()
+    
     const handleSignUpError = () =>{
         setModalVisible(!modalVisible)
         setStep(step - 1)

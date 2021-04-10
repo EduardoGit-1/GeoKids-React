@@ -1,6 +1,14 @@
+import {saveUser} from '../storage/AsyncStorage'
+
 const auth = (state, {type, payload}) =>{
     switch(type){
         case 'REGISTER_SUCCESS':
+            const authState = {
+                ...state,
+                user : payload,
+                isLoggedIn : true
+            }
+            saveUser(authState)
             return{
                 ...state,
                 user : payload,
@@ -12,7 +20,15 @@ const auth = (state, {type, payload}) =>{
                 error: payload
             }
         case 'LOGIN':
-            return state
+            if(payload != null){
+                return {
+                    ...state,
+                    ...payload
+                }
+            }else{
+                return {...state}
+            }
+
         default:
             return state
     }

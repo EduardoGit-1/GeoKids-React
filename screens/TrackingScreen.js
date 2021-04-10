@@ -6,13 +6,17 @@ import MenuButton from '../components/Common/MenuButton'
 import Route from '../components/Routes/Route';
 import getRoutes from '../context/actions/tracking/getRoutes';
 import {GlobalContext} from '../context/Provider'
-
+import {loadRoutes} from '../context/storage/AsyncStorage'
 const TrackingScreen = ({navigation}) =>{
     const {routeState, routeDispatch, authState:{user}} = useContext(GlobalContext)
-    
+    // initializeRouteArray()
+    // useEffect(() =>{
+    //     getRoutes(user.id)(routeDispatch)
+    // }, [])
     useEffect(() =>{
-        //console.log(user.id)
-        getRoutes(user.id)(routeDispatch)
+        loadRoutes().then(routes => 
+                routeDispatch({type:'GET_ROUTES_SUCCESS', payload: routes})
+            )
     }, [])
 
     const renderItem = ({item}) =>(
@@ -35,7 +39,7 @@ const TrackingScreen = ({navigation}) =>{
             :
             null
             }
-            <MenuButton width = '40' height = '40' navigation = {navigation}/>
+            <MenuButton width = '35' height = '35' navigation = {navigation}/>
         </View>
     )
 }

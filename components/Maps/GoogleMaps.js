@@ -7,18 +7,7 @@ import envs from '../../config/env'
 import {LATITUDE_DELTA, LONGITUDE_DELTA} from '../../constants/screenSize'
 
 const {GOOGLE_API_KEY} = envs
-const GoogleMaps = ({setDestination, currentPosition, region, setRegion, destination, isTracking, setCurrentPosition, setIsMoving, setDistance, onMapPress}) =>{
-
-    const onPoiClick = e =>{
-        console.log(e.nativeEvent)
-        setDestination({
-            designation: e.nativeEvent.name,
-            latitude: e.nativeEvent.coordinate.latitude,
-            longitude: e.nativeEvent.coordinate.longitude,
-            latitudeDelta: LATITUDE_DELTA,
-            longitudeDelta: LONGITUDE_DELTA,
-        })
-    }
+const GoogleMaps = ({onPOIClick, currentPosition, region, setRegion, destination, isTracking, setCurrentPosition, setIsMoving, setDistance, onMapPress, onMarkerPress, isRouting}) =>{
 
     const onUserLocationChange = (e) =>{
             let location = {
@@ -30,9 +19,7 @@ const GoogleMaps = ({setDestination, currentPosition, region, setRegion, destina
                 longitudeDelta: 0.002,
             }
             setCurrentPosition(location)
-            if(isTracking){setRegion(location)}
-            
-        
+            if(isTracking){setRegion(location)}   
     }
 
     const onRegionChangeComplete = () =>{
@@ -55,12 +42,14 @@ const GoogleMaps = ({setDestination, currentPosition, region, setRegion, destina
                 followsUserLocation = {isTracking}
                 onUserLocationChange={onUserLocationChange}
                 onRegionChangeComplete = {onRegionChangeComplete}
-                onPoiClick = {onPoiClick}
+                onPoiClick = {onPOIClick}
                 onPress = {onMapPress}>
                     {/* <Marker coordinate = {currentPosition}>
                             <Image style = {styles.customMarker} source = {require('../../assets/characterTeste.png')}/>
                     </Marker>  */}
-                    {destination != null && isTracking === false ?
+                    {destination != null && isTracking === false && isRouting === false? 
+                        <Marker key = {2} coordinate = {destination} onPress = {onMarkerPress}/>
+                    :destination != null && isTracking === false && isRouting?
                         [
                             <MapViewDirections 
                                 key = {1}
@@ -72,9 +61,9 @@ const GoogleMaps = ({setDestination, currentPosition, region, setRegion, destina
                                 mode = 'WALKING'
                                 language = "pt"
                             />,
-                            <Marker key = {2} coordinate = {destination} onPress = {() => {setDestination(null)}}/>,
+                            <Marker key = {2} coordinate = {destination} onPress = {onMarkerPress}/>,
                         ]
-                        : destination != null && isTracking ?
+                        : destination != null && isTracking && isRouting?
                             [
                                 <MapViewDirections 
                                 key = {1}
