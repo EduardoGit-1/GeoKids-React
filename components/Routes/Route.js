@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useRef} from 'react'
 import { View, StyleSheet, Text , Image} from 'react-native'
 import MapView, { Marker } from 'react-native-maps'
 import {mapStyle} from '../../constants/mapStyle'
@@ -10,15 +10,21 @@ import envs from '../../config/env'
 const {GOOGLE_API_KEY} = envs
 
 const Route = ({origin, destination, distance, duration}) =>{
+    const mapRef = useRef(null)
+    const onMapReady = () =>{
+        mapRef.current.fitToCoordinates([origin, destination], { edgePadding: null, animated: false })
+    }
     return (
         <View style = {styles.container}>
             <Text style = {styles.title}>Percurso efetuado:</Text>
             <View style={styles.mapContainer}>
                 <MapView 
                     //initialRegion = {origin}
+                    ref = {mapRef}
                     style = {styles.map}
                     customMapStyle = {mapStyle}
                     provider = {MapView.PROVIDER_GOOGLE}
+                    onMapReady = {onMapReady}
                 >
                     <Marker coordinate = {origin}>
                             <Image style = {styles.customMarker} source = {require('../../assets/characterTeste.png')}/>
@@ -52,7 +58,7 @@ const Route = ({origin, destination, distance, duration}) =>{
                         <DurationIcon width = {26} height = {26}/>
                         <Text style = {styles.text}>{duration} seg.</Text>
                     </View>
-                    <View style = {[styles.pathContainer, {marginLeft: 0}]}>
+                    <View style = {[styles.pathContainer, {marginRight: 35}]}>
                         <DistanceIcon width = {26} height = {26}/>
                         <Text style = {styles.text}>{distance} m.</Text>
                     </View>

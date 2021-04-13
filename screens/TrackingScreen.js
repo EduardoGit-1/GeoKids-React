@@ -8,7 +8,7 @@ import getRoutes from '../context/actions/tracking/getRoutes';
 import {GlobalContext} from '../context/Provider'
 import {loadRoutes} from '../context/storage/AsyncStorage'
 const TrackingScreen = ({navigation}) =>{
-    const {routeState, routeDispatch, authState:{user}} = useContext(GlobalContext)
+    const {routeState, routeDispatch} = useContext(GlobalContext)
     // initializeRouteArray()
     // useEffect(() =>{
     //     getRoutes(user.id)(routeDispatch)
@@ -29,13 +29,12 @@ const TrackingScreen = ({navigation}) =>{
             <BackGround/>
             <Header title ="PERCURSOS"/>
             {routeState.routes != [] ?
-                <ScrollView style = {styles.scrollView}>
-                    <FlatList 
+                    <FlatList
+                        style = {styles.scrollView} 
                         data = {routeState.routes}
                         renderItem = {renderItem}
                         keyExtractor={item => item.id}
                     />
-                </ScrollView>
             :
             null
             }
@@ -52,10 +51,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor : "#E0D8D8",
         overflow: 'hidden',
+
        
     },
     scrollView:{
         marginTop: 35,
+        borderRadius: 10
         
     }
 

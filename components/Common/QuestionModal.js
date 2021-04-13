@@ -4,7 +4,6 @@ import WarningIcon from '../Common/Logos/WarningIcon'
 import OkIcon from './Logos/OkIcon';
 
 const QuestionModal = ({text, onSuccess, onCancel, isModalVisible}) =>{
-
     return(
         <Modal
         animationType="slide"

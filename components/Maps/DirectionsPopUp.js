@@ -6,7 +6,7 @@ import DirectionsIcon from '../Icons/DirectionsIcon';
 import StartRouteIcon from '../Icons/StartRouteIcon';
 import FavoritesLogo from '../Logos/FavoritesLogo'
 
-const DirectionsPopUp = React.forwardRef(({fall, destination, onDirectionsClick, onStartRouteClick}, ref) => {
+const DirectionsPopUp = React.forwardRef(({fall, destination, onDirectionsClick, onStartRouteClick, onEvaluateClick}, ref) => {
     const renderInner = () => (
         <View style = {styles.content}>
             <View style = {{flexWrap: 'nowrap'}}>
@@ -14,7 +14,7 @@ const DirectionsPopUp = React.forwardRef(({fall, destination, onDirectionsClick,
             </View>
             <View style = {[styles.buttonContainer, destination != null && ("placeID" in destination)? {marginTop: 20} : {marginTop:35}]}>
               {destination != null && ("placeID" in destination) ?
-                <TouchableOpacity style = {styles.touchable} >
+                <TouchableOpacity onPress = {onEvaluateClick} style = {styles.touchable} >
                 <View style = {styles.button}>
                     <FavoritesLogo width = {15} height = {15}/>
                     <Text style = {[styles.text, {padding: 8}]}>Avaliar</Text>

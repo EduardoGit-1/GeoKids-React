@@ -32,14 +32,6 @@ export const removeUser = async() =>{
     }
 }
 
-export const initializeRouteArray = async() =>{
-    try {
-        AsyncStorage.setItem('routes', JSON.stringify([]))
-    } catch (error) {
-        
-    }
-}
-
 export const saveRoute = async(route) =>{
     try {
         AsyncStorage.getItem('routes').then(routes =>{
@@ -62,6 +54,47 @@ export const loadRoutes = async () =>{
         else {return null}
 
     }catch(error){
+        console.log(error)
+    }
+}
+
+export const saveClassification = async(place) =>{
+    try {
+        AsyncStorage.getItem('favorites').then(favorites =>{
+            const f = favorites ? JSON.parse(favorites) : [];
+            let favoriteIndex = f.findIndex(favorite => favorite.destination.placeID === place.destination.placeID)
+            if(favoriteIndex != -1){
+                f[favoriteIndex] = place
+                AsyncStorage.setItem('favorites', JSON.stringify(f))
+            }else{
+                f.push(place)
+                AsyncStorage.setItem('favorites', JSON.stringify(f))
+            }
+        })
+    } catch(error) {
+        alert(error)
+    }
+}
+
+export const getFavoritePlace = async(placeID) => {
+    try {
+        console.log(placeID)
+        let favorites = await AsyncStorage.getItem('favorites')
+        if(favorites != null){
+            console.log(favorites)
+            favorites = JSON.parse(favorites)
+            let f = favorites.find(favorite => favorite.destination.placeID === placeID)
+            return f
+        }else{return null}
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const removeFavorites = async() =>{
+    try {
+        AsyncStorage.removeItem("favorites")
+    } catch (error) {
         console.log(error)
     }
 }

@@ -1,25 +1,26 @@
 import React, {useState, useEffect, useContext, useRef} from 'react';
-import {View, Text, StatusBar, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, StatusBar, StyleSheet} from 'react-native';
 import Header from '../components/Common/Header'
 import BackGround from '../components/Common/BackGround'
 import MenuButton from '../components/Common/MenuButton'
 import DestinationSearch from '../components/Maps/DestinationSearch'
 import GoogleMaps from '../components/Maps/GoogleMaps';
-import FavoritesLogo from '../components/Logos/FavoritesLogo';
-import MapLogo from '../components/Logos/MapLogo';
 import Geocoder from 'react-native-geocoding';
 import {LATITUDE_DELTA, LONGITUDE_DELTA} from '../constants/screenSize'
 import envs from '../config/env'
 import registerRoute from '../context/actions/tracking/saveRoute';
 import { initialPursuitState } from '../context/initialStates/trackingState';
 import Animated from 'react-native-reanimated';
-import BottomSheet from 'reanimated-bottom-sheet';
 import {GlobalContext} from '../context/Provider'
 import DirectionsPopUp from '../components/Maps/DirectionsPopUp'
+import ClassificationPopUp from '../components/Classification/ClassificationPopUp';
+import {getFavoritePlace, removeFavorites} from '../context/storage/AsyncStorage'
+import registerClassification from '../context/actions/favorites/saveClassification'
 const {GOOGLE_API_KEY} = envs
 
 Geocoder.init(GOOGLE_API_KEY)
 const MapScreen = ({navigation}) => {
+    //removeFavorites()
     const [distance, setDistance] = useState()
     const [isMoving, setIsMoving] = useState(false)
     const [isRouting, setIsRouting] = useState(false)
@@ -30,6 +31,8 @@ const MapScreen = ({navigation}) => {
     const [pursuitState, setPursuitState] = useState(initialPursuitState)
     const [startTime, setStartTime] = useState()
     const [endTime, setEndTime] = useState()
+    const [classificatonVisibily, setClassificationVisibility] = useState(false)
+    const [classification, setClassification] = useState(null)
     const {routeDispatch, authState:{user}} = useContext(GlobalContext)
 
     const bs = useRef(null);
@@ -196,21 +199,57 @@ const MapScreen = ({navigation}) => {
         setTrackingOption(true)
         bs.current.snapTo(1)
     }
+    const onEvaluateClick = () =>{
+        bs.current.snapTo(1)
+        getFavoritePlace(destination.placeID).then(favourite =>{
+            if(favourite != null){
+                setClassification(favourite)
+            }else{
+                setClassification({
+                    destination,
+                    isFavorite : false,
+                    stars: 0,
+                }
+                )
+            }
+            
+        }).then(() => {setClassificationVisibility(true)})
+
+    }
+    const onEvaluationBack = (stars, isFavorite) =>{
+        if(classification.isFavorite === isFavorite && classification.stars === stars){
+            console.log("yep")
+            setClassificationVisibility(false)
+            setClassification(null)
+            setDestination(null)
+        }else{
+            console.log("no")
+            let data = classification
+            data.userID = user.id
+            data.isFavorite = isFavorite
+            data.stars = stars
+            registerClassification(data)
+            setClassificationVisibility(false)
+            setClassification(null)
+            setDestination(null)
+        }
+    }
     return(
         <View style = {styles.container}>
             <StatusBar hidden />
             <BackGround/>
             <Header title ="MAPA"/>
+            {classification != null ? <ClassificationPopUp destination = {destination} isVisible = {classificatonVisibily} classification = {classification} onCancel = {onEvaluationBack}/> : null}
             <View style = {styles.googleMapsContainer}>
                 <DestinationSearch setRegion = {setRegion}/>
                 <View style = {styles.mapContainer}>
-
                     <DirectionsPopUp 
                     ref = {bs} 
                     fall ={fall}
                     destination = {destination}
                     onDirectionsClick= {onDirectionsClick}
                     onStartRouteClick = {onStartRouteClick}
+                    onEvaluateClick = {onEvaluateClick}
                     />
                     <GoogleMaps 
                         isTracking = {isTracking}
