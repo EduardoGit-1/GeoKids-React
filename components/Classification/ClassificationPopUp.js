@@ -6,10 +6,9 @@ import PreviousButton from '../Common/PreviousButton';
 import Stars from 'react-native-stars';
 import StarIcon from '../Icons/StarIcon'
 
-const ClassificationPopUp = ({destination, isVisible, onCancel, classification}) =>{
+const ClassificationPopUp = ({destination, isVisible, onCancel, classification, onOpinionClick}) =>{
     const [isFavorite, setIsFavorite] = useState(classification.isFavorite)
     const [stars, setStars] = useState(classification.stars)
-    console.log(stars)
     return(
         <Modal
         animationType="slide"
@@ -48,7 +47,7 @@ const ClassificationPopUp = ({destination, isVisible, onCancel, classification})
                     </View>
                 </View>
                 <View style = {{margin: 10}}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress = {() => onOpinionClick(stars, isFavorite)}>
                         <View style = {styles.opinionContainer}>
                             <View style = {{width: 180}}>
                             <Text style = {{fontFamily: 'Lexa-Mega', fontSize: 14, color:'#FFFFFF', textAlign:'center'}}>Dá a tua opinião sobre este local!</Text>

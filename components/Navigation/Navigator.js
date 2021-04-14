@@ -5,10 +5,12 @@ import MapScreen from '../../screens/MapScreen'
 import UploadScreen from '../../screens/UploadScreen'
 import TrackingScreen from '../../screens/TrackingScreen'
 import FavoriteScreen from '../../screens/FavoriteScreen'
+import OpinionScreen from '../../screens/OpinionScreen'
 import MapLogo from '../Logos/MapLogo';
 import TrackingLogo from '../Logos/TrackingLogo';
 import UploadLogo from '../Logos/UploadLogo';
 import FavoritesLogo from '../Logos/FavoritesLogo';
+
 
 
 const Navigator = ({Drawer}) => {
@@ -35,6 +37,7 @@ const Navigator = ({Drawer}) => {
             <FavoritesLogo width ={50} height = {50}/>
           )
         }}/>
+        <Drawer.Screen name="Opiniões" component={OpinionScreen} />
         {/* <Drawer.Screen name="Teste" component={TestScreen} options ={{
           drawerIcon:() => (
             <FavoritesLogo width ={50} height = {50}/>

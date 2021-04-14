@@ -4,6 +4,7 @@ import MapLogo from '../Logos/MapLogo'
 import UploadLogo from '../Logos/UploadLogo'
 import FavoritesLogo from '../Logos/FavoritesLogo'
 import TrackingLogo from '../Logos/TrackingLogo'
+import OpinionLogo from '../Logos/OpinionLogo'
 const Header = ({title}) => {
     let logoWidth = 55
     let logoHeight = 55
@@ -18,6 +19,8 @@ const Header = ({title}) => {
                 return(<TrackingLogo width = {logoWidth} height = {logoHeight}/>)
             case 'FAVORITOS':
                 return(<FavoritesLogo width = {logoWidth - 5} height = {logoHeight- 5}/>)
+            case 'OPINIÕES':
+                return(<OpinionLogo width = {logoWidth} height = {logoHeight}/>)
         }
     }
     let currentLogo = getLogo(title)

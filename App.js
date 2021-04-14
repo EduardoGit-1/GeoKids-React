@@ -38,7 +38,6 @@ import MapScreen from './screens/MapScreen'
 import UploadScreen from './screens/UploadScreen'
 import TrackingScreen from './screens/TrackingScreen'
 import FavoriteScreen from './screens/FavoriteScreen'
-import TestScreen from './screens/TestScreen'
 import LoginScreen from './screens/LoginScreen'
 import AppLoading from 'expo-app-loading';
 import SideBar from './components/Navigation/SideBar'

@@ -4,9 +4,11 @@ import {DrawerItem, DrawerItemList} from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import {GlobalContext} from '../../context/Provider'
 
-export default Sidebar = props =>{
+const Sidebar = props =>{
     const {authState:{user}} = useContext(GlobalContext)
-    //console.log(user)
+    const { state, ...rest } = props;
+    const newState = { ...state}
+    newState.routes = newState.routes.filter(item => item.name !== 'Opiniões')
     return(
         <ScrollView style={styles.scrollView}>
             <View style = {styles.header}>
@@ -15,12 +17,13 @@ export default Sidebar = props =>{
                 <Text style = {styles.nickname}>{user.nickname}</Text>
             </View>
             <View style = {styles.container}>
-                <DrawerItemList {...props}/>
+                <DrawerItemList state = {newState} {...rest}/>
             </View>
         </ScrollView>
     )
 }
 
+export default Sidebar
 
 const styles = StyleSheet.create({
     scrollView:{

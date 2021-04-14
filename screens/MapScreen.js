@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useContext, useRef} from 'react';
 import {View, Text, StatusBar, StyleSheet} from 'react-native';
+import answersInitialState from '../context/initialStates/answersInitialState'
 import Header from '../components/Common/Header'
 import BackGround from '../components/Common/BackGround'
 import MenuButton from '../components/Common/MenuButton'
@@ -199,6 +200,16 @@ const MapScreen = ({navigation}) => {
         setTrackingOption(true)
         bs.current.snapTo(1)
     }
+    
+    const onOpinionClick = (stars, isFavorite) =>{
+        bs.current.snapTo(1)
+        let userID = user.id
+        let answers = classification.answers;
+        setClassificationVisibility(false)
+
+        navigation.navigate("Opiniões", {destination, userID, stars, isFavorite, answers})
+
+    }
     const onEvaluateClick = () =>{
         bs.current.snapTo(1)
         getFavoritePlace(destination.placeID).then(favourite =>{
@@ -209,11 +220,13 @@ const MapScreen = ({navigation}) => {
                     destination,
                     isFavorite : false,
                     stars: 0,
+                    answers: answersInitialState
                 }
                 )
             }
             
         }).then(() => {setClassificationVisibility(true)})
+
 
     }
     const onEvaluationBack = (stars, isFavorite) =>{
@@ -239,7 +252,7 @@ const MapScreen = ({navigation}) => {
             <StatusBar hidden />
             <BackGround/>
             <Header title ="MAPA"/>
-            {classification != null ? <ClassificationPopUp destination = {destination} isVisible = {classificatonVisibily} classification = {classification} onCancel = {onEvaluationBack}/> : null}
+            {classification != null ? <ClassificationPopUp destination = {destination} isVisible = {classificatonVisibily} classification = {classification} onOpinionClick = {onOpinionClick} onCancel = {onEvaluationBack}/>: null}
             <View style = {styles.googleMapsContainer}>
                 <DestinationSearch setRegion = {setRegion}/>
                 <View style = {styles.mapContainer}>
