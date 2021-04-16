@@ -51,7 +51,7 @@ export const loadRoutes = async () =>{
         if(routes != null){
             return JSON.parse(routes)
         }
-        else {return null}
+        else {return []}
 
     }catch(error){
         console.log(error)
@@ -76,6 +76,20 @@ export const saveClassification = async(place) =>{
     }
 }
 
+export const loadFavourites = async() =>{
+    try{
+        let favourites = await AsyncStorage.getItem("favorites")
+
+        if(favourites != null){
+            return JSON.parse(favourites)
+        }
+        else {return []}
+
+    }catch(error){
+        console.log(error)
+    }
+}
+
 export const getFavoritePlace = async(placeID) => {
     try {
         console.log(placeID)
@@ -96,5 +110,14 @@ export const removeFavorites = async() =>{
         AsyncStorage.removeItem("favorites")
     } catch (error) {
         console.log(error)
+    }
+}
+
+export const removeEverything = async () =>{
+    try {
+        AsyncStorage.removeItem("favorites")
+        AsyncStorage.removeItem("routes")
+    } catch (error) {
+        
     }
 }

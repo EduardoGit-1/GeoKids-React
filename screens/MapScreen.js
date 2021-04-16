@@ -34,7 +34,7 @@ const MapScreen = ({navigation}) => {
     const [endTime, setEndTime] = useState()
     const [classificatonVisibily, setClassificationVisibility] = useState(false)
     const [classification, setClassification] = useState(null)
-    const {routeDispatch, authState:{user}} = useContext(GlobalContext)
+    const {routeDispatch, favouritesDispatch,authState:{user}} = useContext(GlobalContext)
 
     const bs = useRef(null);
     const fall = new Animated.Value(1);
@@ -129,7 +129,6 @@ const MapScreen = ({navigation}) => {
             setDestination(null)
             setStartTime(null)
             setIsMoving(false)
-            //setPursuitState(null)
         }
     }, [isTracking])
 
@@ -167,7 +166,6 @@ const MapScreen = ({navigation}) => {
                 duration: duration,
                 isDone : true,
             }), console.log(pursuitState))
-            //registerRoute(pursuitState)
             setEndTime(null)
             setStartTime(null)
             
@@ -184,18 +182,11 @@ const MapScreen = ({navigation}) => {
     }, [pursuitState.isDone])
 
     
-
-    const handleTrackingOption = () =>{
-        setTrackingOption(!isTracking)
-    }
-
     const onDirectionsClick = () =>{
-        console.log("teste")
         setIsRouting(true)
         bs.current.snapTo(1)
     }
     const onStartRouteClick = () =>{
-        console.log("yep")
         setIsRouting(true)
         setTrackingOption(true)
         bs.current.snapTo(1)
@@ -221,8 +212,7 @@ const MapScreen = ({navigation}) => {
                     isFavorite : false,
                     stars: 0,
                     answers: answersInitialState
-                }
-                )
+                })
             }
             
         }).then(() => {setClassificationVisibility(true)})
@@ -241,7 +231,7 @@ const MapScreen = ({navigation}) => {
             data.userID = user.id
             data.isFavorite = isFavorite
             data.stars = stars
-            registerClassification(data)
+            registerClassification(data)(favouritesDispatch)
             setClassificationVisibility(false)
             setClassification(null)
             setDestination(null)
@@ -288,7 +278,6 @@ const MapScreen = ({navigation}) => {
                 </View>
             </View>
             <MenuButton width = '35' height = '35' navigation = {navigation}/>
-
         </View>
     )
 }

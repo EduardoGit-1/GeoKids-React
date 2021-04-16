@@ -1,4 +1,4 @@
-const auth = (state, {type, payload}) =>{
+const routeReducer = (state, {type, payload}) =>{
     switch(type){
         case 'REGISTER_SUCCESS':
             //myArray: [...this.state.myArray, 'new value'] 
@@ -13,7 +13,7 @@ const auth = (state, {type, payload}) =>{
                 error: payload
             }
         case 'GET_ROUTES_SUCCESS':
-            console.log(payload)
+            //console.log(payload)
             return {
                 ...state,
                 routes : payload
@@ -27,4 +27,4 @@ const auth = (state, {type, payload}) =>{
             return state
     }
 }
-export default auth;
+export default routeReducer;
