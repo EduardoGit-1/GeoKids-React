@@ -15,13 +15,14 @@ import Animated from 'react-native-reanimated';
 import {GlobalContext} from '../context/Provider'
 import DirectionsPopUp from '../components/Maps/DirectionsPopUp'
 import ClassificationPopUp from '../components/Classification/ClassificationPopUp';
-import {getFavoritePlace, removeFavorites} from '../context/storage/AsyncStorage'
+import {getFavoritePlace, removeFavorites, removeUploads} from '../context/storage/AsyncStorage'
 import registerClassification from '../context/actions/favorites/saveClassification'
 const {GOOGLE_API_KEY} = envs
 
 Geocoder.init(GOOGLE_API_KEY)
 const MapScreen = ({navigation}) => {
     //removeFavorites()
+    //removeUploads()
     const [distance, setDistance] = useState()
     const [isMoving, setIsMoving] = useState(false)
     const [isRouting, setIsRouting] = useState(false)
@@ -294,7 +295,7 @@ const styles = StyleSheet.create({
         overflow:'hidden'
     },
     mapContainer:{
-        height: 480,
+        height: 490,
         width : 300,
         marginTop: 15,
         borderRadius: 15,

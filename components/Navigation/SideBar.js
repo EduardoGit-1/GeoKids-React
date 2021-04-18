@@ -8,7 +8,7 @@ const Sidebar = props =>{
     const {authState:{user}} = useContext(GlobalContext)
     const { state, ...rest } = props;
     const newState = { ...state}
-    newState.routes = newState.routes.filter(item => item.name !== 'Opiniões')
+    newState.routes = newState.routes.filter(item => item.name !== 'Opiniões' && item.name !== 'Uploads')
     return(
         <ScrollView style={styles.scrollView}>
             <View style = {styles.header}>

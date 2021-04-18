@@ -16,16 +16,19 @@ const TrackingScreen = ({navigation}) =>{
             <StatusBar hidden />
             <BackGround/>
             <Header title ="PERCURSOS"/>
-            {routeState.routes != [] ?
-                    <FlatList
-                        style = {styles.scrollView} 
-                        data = {routeState.routes}
-                        renderItem = {renderItem}
-                        keyExtractor={item => item.id}
-                    />
-            :
-            null
-            }
+            <View style = {{height: 590}}>
+                {routeState.routes != [] ?
+                        <FlatList
+                            style = {styles.scrollView} 
+                            data = {routeState.routes}
+                            renderItem = {renderItem}
+                            keyExtractor={item => item.id}
+                        />
+                :
+                null
+                }
+            </View>
+
             <MenuButton width = '35' height = '35' navigation = {navigation}/>
         </View>
     )

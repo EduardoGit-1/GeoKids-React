@@ -37,9 +37,9 @@ const MenuButton = ({width, height, navigation}) =>{
 
 const styles = StyleSheet.create({
     buttonContainer:{
-        alignSelf:'flex-start',
-        marginTop : 20,
-        marginLeft : 20,
+        position: 'absolute',
+        bottom : 10,
+        left: 10
         // alignItems : 'center',
         //alignSelf: 'flex-start',
     },

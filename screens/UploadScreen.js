@@ -1,98 +1,178 @@
-import React, { useState } from 'react';
-import {View, Text, StyleSheet, Image, StatusBar, TouchableOpacity, PermissionsAndroid, Platform} from 'react-native';
+import React, {useReducer , useRef, useContext, useEffect, useState} from 'react';
+import {View,StyleSheet, StatusBar, TouchableOpacity,SectionList} from 'react-native';
 import BackGround from '../components/Common/BackGround'
 import Header from '../components/Common/Header'
 import MenuButton from '../components/Common/MenuButton'
-import * as ImagePicker from "react-native-image-picker"
-import { useEffect } from 'react';
+import * as ImagePicker from 'expo-image-picker';
+import { Audio } from 'expo-av';
+import ImageComponent from '../components/Uploads/ImageComponent';
+import VideoComponent from '../components/Uploads/VideoComponent';
+import {GlobalContext} from '../context/Provider'
+import AddUploadIcon from '../components/Icons/AddUploadIcon'
+import Animated from 'react-native-reanimated';
+import UploadPopup from '../components/Uploads/UploadPopup';
+import UploadHeader from '../components/Uploads/UploadHeader'
+import uploadReducer from '../context/reducers/uploadsReducer'
+import sendImage from '../context/actions/uploads/addImage'
+import sendVideo from '../context/actions/uploads/addVideo'
+import sendAudio from '../context/actions/uploads/addAudio'
+import {getUploads} from '../context/storage/AsyncStorage' 
+import RecordAudioComponent from '../components/Uploads/RecordAudioComponent';
+import AudioComponent from '../components/Uploads/AudioComponent';
 
-const UploadScreen = ({navigation}) =>{
-    const [filePath, setFilePath] = useState({});
-    const requestCameraPermission = async () => {
-        if (Platform.OS === 'android') {
-            try {
-            const granted = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.CAMERA,
-                {
-                title: 'Camera Permission',
-                message: 'App needs camera permission',
-                },
-            );
-            // If CAMERA Permission is granted
-            return granted === PermissionsAndroid.RESULTS.GRANTED;
-            } catch (err) {
-            console.warn(err);
-            return false;
-            }
-        } else return true;
-        };
-    const requestExternalWritePermission = async () => {
-        if (Platform.OS === 'android') {
-            try {
-            const granted = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-                {
-                title: 'External Storage Write Permission',
-                message: 'App needs write permission',
-                },
-            );
-            // If WRITE_EXTERNAL_STORAGE Permission is granted
-            return granted === PermissionsAndroid.RESULTS.GRANTED;
-            } catch (err) {
-            console.warn(err);
-            alert('Write permission err', err);
-            }
-            return false;
-        } else return true;
-        };
+const UploadScreen = ({navigation, route}) =>{
+  const {authState:{user}} = useContext(GlobalContext)
+  const [uploadState, uploadDispatch] = useReducer(uploadReducer, {images: [], videos : [], audios: []})
+  const {destination} = route.params;
+  const [recording, setRecording] = useState(null)
+  const [isRecordingVisible, setRecordingVisible] = useState(false)
+  const bs = useRef(null);
+  const fall = new Animated.Value(1);
+  useEffect(()=>{
+    getUploads(destination.placeID).then((upload) =>{
 
-    requestCameraPermission();
-    requestExternalWritePermission();
-      const chooseFile = (type) => {
-        let options = {
-          mediaType: type,
-          maxWidth: 300,
-          maxHeight: 550,
-          quality: 1,
-        };
-        console.log(options)
-        ImagePicker.launchImageLibrary(options, (response) => {
-          console.log('Response = ', response);
-    
-          if (response.didCancel) {
-            alert('User cancelled camera picker');
-            return;
-          } else if (response.errorCode == 'camera_unavailable') {
-            alert('Camera not available on device');
-            return;
-          } else if (response.errorCode == 'permission') {
-            alert('Permission not satisfied');
-            return;
-          } else if (response.errorCode == 'others') {
-            alert(response.errorMessage);
-            return;
-          }
-          console.log('base64 -> ', response.base64);
-          console.log('uri -> ', response.uri);
-          console.log('width -> ', response.width);
-          console.log('height -> ', response.height);
-          console.log('fileSize -> ', response.fileSize);
-          console.log('type -> ', response.type);
-          console.log('fileName -> ', response.fileName);
-          setFilePath(response);
-        });
-      };
+      uploadDispatch({
+        type : 'GET_UPLOADS_SUCCESS',
+        payload: upload
+      })
+    })
+  }, [destination])
+
+  let DATA = [
+    {
+      title: 'Imagens',
+      data : uploadState.images
+    },
+    {
+      title: 'Videos',
+      data: uploadState.videos
+    },
+    {
+      title: 'Audio',
+      data: uploadState.audios
+    }
+  ]
+    const renderItem = ({item}) =>{
+        if(item.type === "image"){
+          return (<ImageComponent image = {item.data}/>)
+        }else if (item.type === "video"){
+          return (<VideoComponent video = {item.data}/>)
+        }else{
+          return (<AudioComponent audio = {item.data}/>)
+        }
+      }
+
+    const pickImage = async () => {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: false,
+        aspect: [4, 3],
+        quality: 1,
+      });
+      console.log(result);
+
+        if(result.type === 'video'){
+          console.log("video")
+          sendVideo(destination, user.id, result.uri)(uploadDispatch)
+        }else{
+          console.log("imagem")
+          sendImage(destination, user.id, result.uri)(uploadDispatch)
+        }
+      }
+
+    const useCamera = async () => {
+      let result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: false,
+        aspect: [4, 3],
+        quality: 1,
+      });
+      console.log(result);
+      if (!result.cancelled) {
+        if(result.type === "video"){
+          console.log(result.uri)
+        }else{
+          console.log(result.uri)
+        }
+      }
+    }
+
+    async function startRecording() {
+      try {
+        console.log('Requesting permissions..');
+        await Audio.requestPermissionsAsync();
+        await Audio.setAudioModeAsync({
+          allowsRecordingIOS: true,
+          playsInSilentModeIOS: true,
+        }); 
+        console.log('Starting recording..');
+        const recording = new Audio.Recording();
+        await recording.prepareToRecordAsync(Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY);
+        await recording.startAsync(); 
+        setRecording(recording);
+        console.log('Recording started');
+      } catch (err) {
+        console.error('Failed to start recording', err);
+      }
+    }
+    const onAudioPress = () =>{
+      setRecordingVisible(true);
+      bs.current.snapTo(1)
+    }
+  
+    async function stopRecording() {
+      console.log('Stopping recording..');
+      setRecording(undefined);
+      await recording.stopAndUnloadAsync();
+      const uri = recording.getURI();
+      setRecordingVisible(false); 
+      if(uri != null){
+        sendAudio(destination, user.id, uri)(uploadDispatch)
+      }
+      console.log('Recording stopped and stored at', uri);
+    }
+
     return(
         <View style = {styles.container}>
             <StatusBar hidden />
             <BackGround/>
             <Header title ="UPLOADS"/>
-            <TouchableOpacity onPress = {() => chooseFile('photo')}>
-                <View style = {{borderWidth:2}} >
-                    <Text>Upload imagem</Text>
-                </View>
+            <UploadPopup 
+              ref = {bs} 
+              fall = {fall}
+              onGalleryPress = {pickImage}
+              onCameraPress = {useCamera}
+              onAudioPress = {onAudioPress}
+            />
+             <RecordAudioComponent 
+              recording = {recording} 
+              isModalVisibile = {isRecordingVisible} 
+              setModalVisible= {setRecordingVisible}
+              startRecording = {startRecording}
+              stopRecording = {stopRecording}/> 
+            <View style = {{height : 600}}>
+
+              <SectionList
+              sections={DATA}
+              keyExtractor={(item, index) => item + index}
+              renderItem={renderItem}
+              ItemSeparatorComponent = {() => {return (<View style ={{padding:15}}></View>)}}
+              renderSectionHeader={({ section: { title } }) => {
+                let info = DATA.find(data => data.title === title)
+                let arrayLength = info.data.length;
+                  return <UploadHeader title = {title} arrayLength = {arrayLength}/>
+
+              }
+              }
+            />
+            </View>
+            <MenuButton width = '35' height = '35' navigation = {navigation}/>
+            <TouchableOpacity style = {{position:'absolute', bottom: 10, right: 10}} onPress={()=>{bs.current.snapTo(0)}}>
+              <View >
+                <AddUploadIcon width = {47} height = {47} />
+              </View>
             </TouchableOpacity>
-            <MenuButton width = '40' height = '40' navigation = {navigation}/>
+            
         </View>
     )
 }
@@ -106,6 +186,30 @@ const styles = StyleSheet.create({
         backgroundColor : "#E0D8D8",
         overflow: 'hidden'
     },
+    videoContainer:{
+      borderWidth: 2,
+      borderRadius:10,
+      justifyContent: 'center',
+      backgroundColor: '#ecf0f1',
+      overflow:'hidden'
+    },
+    video: {
+      alignSelf: 'center',
+      width: 350,
+      height: 220,
+    },
+    image:{
+      flex:1, 
+      width: undefined, 
+      height: undefined,
+      resizeMode:'contain'
+    },
+    imageContainer:{
+      borderRadius:10,
+      borderWidth: 2,
+      width: 330, 
+      height:250
+    }
 
 })
 

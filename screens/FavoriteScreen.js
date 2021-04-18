@@ -10,7 +10,7 @@ const FavoriteScreen = ({navigation}) =>{
     const {favouritesState} = useContext(GlobalContext)
 
     const renderItem = ({item}) =>(
-        <FavoritePlace destination = {item.destination} stars = {item.stars} isFavorite = {item.isFavorite}/>
+        <FavoritePlace destination = {item.destination} stars = {item.stars} isFavorite = {item.isFavorite} navigation = {navigation}/>
     )
 
     return(

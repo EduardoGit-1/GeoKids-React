@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react'
-import { View, StyleSheet, Text } from 'react-native'
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native'
 import MapView, { Marker } from 'react-native-maps'
 import {mapStyle} from '../../constants/mapStyle'
 import TrackIcon from '../Icons/TrackIcon'
@@ -7,11 +7,15 @@ import Stars from 'react-native-stars';
 import StarIcon from '../Icons/StarIcon'
 import FavoritesHeartIcon from '../Icons/FavoritesHeartIcon'
 import CheckBoxIcon from '../Icons/CheckBoxIcon'
+import UploadLogo from '../Logos/UploadLogo'
 
-const FavoritePlace = ({destination, stars, isFavorite}) =>{
+const FavoritePlace = ({destination, stars, isFavorite, navigation}) =>{
     const mapRef = useRef(null)
     const onMapReady = () =>{
         mapRef.current.fitToCoordinates([destination], { edgePadding: null, animated: false })
+    }
+    const onSeeUploadsClick = () => {
+        navigation.navigate("Uploads", {destination});
     }
     return (
         <View style = {styles.container}>
@@ -75,6 +79,12 @@ const FavoritePlace = ({destination, stars, isFavorite}) =>{
 
                 </View>
             </View>
+            <TouchableOpacity style = {{padding:10}} onPress={onSeeUploadsClick}>
+                <View style = {styles.uploadButton}>
+                    <UploadLogo width= {20} height = {20}/>
+                    <Text style = {{fontFamily: 'Lexa-Mega', color:'#FFFFFF', marginLeft: 6}}>Ver uploads</Text>
+                </View>
+            </TouchableOpacity>
         </View>
     )
 }
@@ -140,7 +150,17 @@ const styles = StyleSheet.create({
         flexDirection : 'row',
         padding:5
     },
-
-
+    uploadButton:{
+        alignSelf:'center',
+        flexDirection: 'row',
+        alignContent:'center',
+        alignItems:'center',
+        justifyContent:'center',
+        width: 160,
+        borderWidth: 1.5,
+        padding: 4,
+        borderRadius: 6,
+        backgroundColor: '#F44336'
+    }
     
 })

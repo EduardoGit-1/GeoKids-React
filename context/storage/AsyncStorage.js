@@ -1,7 +1,5 @@
 import {AsyncStorage} from 'react-native'
 
-
-
 export const saveUser = async (authState) =>{
     try{
         await AsyncStorage.setItem("authState", JSON.stringify(authState))
@@ -92,10 +90,9 @@ export const loadFavourites = async() =>{
 
 export const getFavoritePlace = async(placeID) => {
     try {
-        console.log(placeID)
+
         let favorites = await AsyncStorage.getItem('favorites')
         if(favorites != null){
-            console.log(favorites)
             favorites = JSON.parse(favorites)
             let f = favorites.find(favorite => favorite.destination.placeID === placeID)
             return f
@@ -108,6 +105,87 @@ export const getFavoritePlace = async(placeID) => {
 export const removeFavorites = async() =>{
     try {
         AsyncStorage.removeItem("favorites")
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const saveImageUpload = async(destination, image) =>{
+    try {
+        AsyncStorage.getItem('uploads').then(uploads =>{
+            const u = uploads ? JSON.parse(uploads) : [];
+            let uploadIndex = u.findIndex(upload => upload.destination.placeID === destination.placeID)
+            if(uploadIndex != -1){
+                u[uploadIndex].images.push(image);
+                AsyncStorage.setItem('uploads', JSON.stringify(u))
+            }else{
+                let upload = {destination, images: [image], videos: [], audios: []}
+                u.push(upload)
+                AsyncStorage.setItem('uploads', JSON.stringify(u))
+            }
+        })
+    } catch(error) {
+        alert(error)
+    }
+}
+
+export const saveVideoUpload = async(destination, video) =>{
+    try {
+        AsyncStorage.getItem('uploads').then(uploads =>{
+            const u = uploads ? JSON.parse(uploads) : [];
+            let uploadIndex = u.findIndex(upload => upload.destination.placeID === destination.placeID)
+            if(uploadIndex != -1){
+                u[uploadIndex].videos.push(video)
+                AsyncStorage.setItem('uploads', JSON.stringify(u))
+            }else{
+                let upload = {destination, images: [], videos: [video], audios: []}
+                u.push(upload)
+                AsyncStorage.setItem('uploads', JSON.stringify(u))
+            }
+        })
+    } catch(error) {
+        alert(error)
+    }
+}
+
+export const saveAudioUpload = async(destination, audio) =>{
+    try {
+        AsyncStorage.getItem('uploads').then(uploads =>{
+            const u = uploads ? JSON.parse(uploads) : [];
+            let uploadIndex = u.findIndex(upload => upload.destination.placeID === destination.placeID)
+            if(uploadIndex != -1){
+                u[uploadIndex].audios.push(audio)
+                AsyncStorage.setItem('uploads', JSON.stringify(u))
+            }else{
+                let upload = {destination, images: [], videos: [], audios : [audio]}
+                u.push(upload)
+                AsyncStorage.setItem('uploads', JSON.stringify(u))
+            }
+        })
+    } catch(error) {
+        alert(error)
+    }
+}
+
+export const getUploads = async(placeID) => {
+    try {
+        let uploads = await AsyncStorage.getItem('uploads')
+        if(uploads != null){
+            uploads = JSON.parse(uploads)
+            let f = uploads.find(upload => upload.destination.placeID === placeID)
+            if(f != null){
+                return f
+            }
+        }
+        return {images: [], videos : [], audios : []}
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const removeUploads = async() =>{
+    try {
+        AsyncStorage.removeItem("uploads")
     } catch (error) {
         console.log(error)
     }
