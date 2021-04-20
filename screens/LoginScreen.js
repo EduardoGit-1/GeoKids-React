@@ -8,8 +8,11 @@ import register from '../context/actions/auth/registerUser'
 import WarningModal from '../components/Common/WarningModal';
 import {GlobalContext} from '../context/Provider'
 import {loadUser,loadRoutes,loadFavourites, removeUser} from '../context/storage/AsyncStorage'
+import WarningIndex from '../components/Login/WarningIndex';
+import WarningIcon from '../components/Common/Logos/WarningIcon';
 
 const Login = ({Drawer}) =>{
+    removeUser()
     const [step, setStep] = useState(1)
     const [characterID, setCharacterID] = useState(0)
     const [nickname, setNickname] = useState('')
@@ -20,11 +23,11 @@ const Login = ({Drawer}) =>{
                 authDispatch({type:'LOGIN', payload: authState})
             )
     }, [])
-    // removeUser()
+ 
     
     const handleSignUpError = () =>{
         setModalVisible(!modalVisible)
-        setStep(step - 1)
+        
     }
     const signUp = () =>{
         register({nickname, characterID})(authDispatch, setModalVisible)
@@ -37,14 +40,15 @@ const Login = ({Drawer}) =>{
     let selectForm = (step) => {
         switch(step){
             case 1:
-                return <InsertNickname state = {state} setNickname = {setNickname} setStep = {setStep}/>
-                
+                return <WarningIndex state = {state} setCharacter = {setCharacterID} setStep = {setStep}/>
             case 2:
-                return <Character state = {state} setCharacter = {setCharacterID} setStep = {setStep} signUp = {signUp}/>
+                return <Character state = {state} setCharacter = {setCharacterID} setStep = {setStep}/>
+            case 3:
+                return <InsertNickname state = {state} setNickname = {setNickname} setStep = {setStep} signUp = {signUp}/>
             
         }
     }
-    if(step === 3 || isLoggedIn){
+    if(step === 4 || isLoggedIn){
         return <Navigator Drawer = {Drawer}/>
     }
 
@@ -57,8 +61,13 @@ const Login = ({Drawer}) =>{
                 modalVisible = {modalVisible} 
                 onClose = {handleSignUpError}
                 />
-            <View style= {styles.logo}>
-                    <Image styles = {styles.logo} source ={require('../assets/logos/geoKidsLogoLogin.png')}/>
+            <View style= {[step == 1 ? {marginBottom:120} : {marginBottom:40}]}>
+                    {step == 1 ? 
+                        <WarningIcon width= {170} height= {170} />
+                    :
+                        <Image source ={require('../assets/logos/geoKidsLogoLogin.png')}/>
+                    }
+                    
             </View>
                 {selectForm(step)}
         </View>

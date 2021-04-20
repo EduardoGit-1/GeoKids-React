@@ -3,6 +3,7 @@ import { View, StyleSheet, Text, Modal, TouchableOpacity} from 'react-native'
 import envs from '../../config/env'
 import {GET_VIDEO} from '../../constants/endpoints'
 import RecordingIcon from '../Icons/RecordingIcon'
+import PreviousButton from '../Common/PreviousButton'
 const {DEV_BACKEND_URL} = envs
 
 const RecordAudioComponent = ({recording, isModalVisibile, startRecording, stopRecording, setModalVisible}) =>{
@@ -27,15 +28,25 @@ const RecordAudioComponent = ({recording, isModalVisibile, startRecording, stopR
             }}
             >
                 <View style = {styles.centeredView}>
-                <View style = {styles.container}>
+                <View style = {[styles.container, recording ? {height: 110} : {height: 130}]}>
                     <View style = {{flexDirection:'row'}}>
-                    <TouchableOpacity onPress = {switchFunction}>
-                        <View style = {[styles.buttonContainer, recording ? {marginRight: 230,}: null]}>
-                            <RecordingIcon width = {50} height={50} isRecording={recording}/>
-                        </View>
-                    </TouchableOpacity>
-                        <Text style = {[styles.text, recording ? {position: 'absolute', left:100}: null]}>{recording ? "A gravar..." : "Começa a gravação!"}</Text>
+                        <TouchableOpacity onPress = {switchFunction}>
+                            <View style = {[styles.buttonContainer, recording ? {marginRight: 230,}: null]}>
+                                <RecordingIcon width = {50} height={50} isRecording={recording}/>
+                            </View>
+                        </TouchableOpacity>
+                        <Text style = {[styles.text, recording ? {position: 'absolute', left:100}: null]}>{recording ? "A gravar..." : "Clica para começar!"}</Text>
                     </View>
+                    {!recording ? 
+                    <TouchableOpacity style = {{position: 'absolute', bottom: 0, left : 10}}onPress = {() => setModalVisible(false)}>
+                    <View style = {{flexDirection:'row', alignItems: 'center'}}>
+                        <PreviousButton width= {20} height = {20}/>
+                        <Text style = {[styles.text, {marginLeft: 5,}]}>Voltar</Text>
+                    </View>
+                    </TouchableOpacity>
+                                    : null
+                    }
+
                 </View>
                 </View>
             </Modal>

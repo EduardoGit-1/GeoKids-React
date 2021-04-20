@@ -10,6 +10,7 @@ import MapLogo from '../Logos/MapLogo';
 import TrackingLogo from '../Logos/TrackingLogo';
 import UploadLogo from '../Logos/UploadLogo';
 import FavoritesLogo from '../Logos/FavoritesLogo';
+import OpinionLogo from '../Logos/OpinionLogo';
 
 
 
@@ -22,11 +23,6 @@ const Navigator = ({Drawer}) => {
             <MapLogo width ={50} height = {50}/>
           )
         }}/>
-        <Drawer.Screen name="Uploads" component={UploadScreen} options ={{
-          drawerIcon:() => (
-            <UploadLogo width ={50} height = {50}/>
-          )
-        }}/>
         <Drawer.Screen name="Percursos" component={TrackingScreen} options ={{
           drawerIcon:() => (
             <TrackingLogo width ={50} height = {50}/>
@@ -37,7 +33,16 @@ const Navigator = ({Drawer}) => {
             <FavoritesLogo width ={50} height = {50}/>
           )
         }}/>
-        <Drawer.Screen name="Opiniões" component={OpinionScreen} />
+        <Drawer.Screen name="Opiniões" component={OpinionScreen} options = {{
+          drawerIcon:() => (
+            <OpinionLogo width ={50} height = {50}/>
+          )
+        }}/>
+        <Drawer.Screen name="Uploads" component={UploadScreen} options ={{
+          drawerIcon:() => (
+            <UploadLogo width ={50} height = {50}/>
+          )
+        }}/>
         {/* <Drawer.Screen name="Teste" component={TestScreen} options ={{
           drawerIcon:() => (
             <FavoritesLogo width ={50} height = {50}/>

@@ -7,14 +7,14 @@ import Route from '../components/Routes/Route';
 import {GlobalContext} from '../context/Provider'
 import {loadRoutes} from '../context/storage/AsyncStorage'
 const TrackingScreen = ({navigation}) =>{
-    const {routeState, routeDispatch} = useContext(GlobalContext)
+    const {routeState, routeDispatch, authState:{user}} = useContext(GlobalContext)
     useEffect(()=>{
         loadRoutes().then(routes => 
             routeDispatch({type:'GET_ROUTES_SUCCESS', payload: routes})
         )
     },[])
     const renderItem = ({item}) =>(
-        <Route origin = {item.origin} destination = {item.destination} duration = {item.duration} distance = {item.distance}/>
+        <Route origin = {item.origin} destination = {item.destination} duration = {item.duration} distance = {item.distance} avatarIndex = {user.characterID}/>
     )
 
     return(

@@ -15,14 +15,18 @@ import Animated from 'react-native-reanimated';
 import {GlobalContext} from '../context/Provider'
 import DirectionsPopUp from '../components/Maps/DirectionsPopUp'
 import ClassificationPopUp from '../components/Classification/ClassificationPopUp';
-import {getFavoritePlace, removeFavorites, removeUploads} from '../context/storage/AsyncStorage'
+import {getFavoritePlace, removeFavorites, removeUploads, removeRoutes} from '../context/storage/AsyncStorage'
 import registerClassification from '../context/actions/favorites/saveClassification'
+import StartRoutePopUp from '../components/Maps/StartRoutePopup';
+import ReachedDestinationIcon from '../components/Icons/ReachedDestinationIcon';
+import SuccessModal from '../components/Common/SuccessModal'
 const {GOOGLE_API_KEY} = envs
 
 Geocoder.init(GOOGLE_API_KEY)
 const MapScreen = ({navigation}) => {
-    //removeFavorites()
-    //removeUploads()
+    // removeFavorites()
+    // removeUploads()
+    // removeRoutes()
     const [distance, setDistance] = useState()
     const [isMoving, setIsMoving] = useState(false)
     const [isRouting, setIsRouting] = useState(false)
@@ -36,14 +40,18 @@ const MapScreen = ({navigation}) => {
     const [classificatonVisibily, setClassificationVisibility] = useState(false)
     const [classification, setClassification] = useState(null)
     const {routeDispatch, favouritesDispatch,authState:{user}} = useContext(GlobalContext)
+    const [isSuccessVisible, setSuccessVisible] = useState(false)
 
     const bs = useRef(null);
     const fall = new Animated.Value(1);
+    const bs2 = useRef(null);
+    const fall2 = new Animated.Value(1);
 
     const onMapPress = (e) =>{
         Geocoder.from(e.nativeEvent.coordinate.latitude, e.nativeEvent.coordinate.longitude)
 		.then((json) => {
         	var designation = json.results[3].formatted_address;
+            designation = designation.replace(/(\r\n|\n|\r)/gm, " ")
             setDestination(prevState => ({
                 ...prevState,
                 designation
@@ -64,8 +72,10 @@ const MapScreen = ({navigation}) => {
     }
     const onPOIClick = e =>{
         console.log(e.nativeEvent)
+        let designation = e.nativeEvent.name
+        designation = designation.replace(/(\r\n|\n|\r)/gm, " ")
         setDestination({
-            designation: e.nativeEvent.name,
+            designation: designation,
             placeID : e.nativeEvent.placeId,
             latitude: e.nativeEvent.coordinate.latitude,
             longitude: e.nativeEvent.coordinate.longitude,
@@ -169,6 +179,7 @@ const MapScreen = ({navigation}) => {
             }), console.log(pursuitState))
             setEndTime(null)
             setStartTime(null)
+            setSuccessVisible(true)
             
         }
 
@@ -186,11 +197,20 @@ const MapScreen = ({navigation}) => {
     const onDirectionsClick = () =>{
         setIsRouting(true)
         bs.current.snapTo(1)
+        bs2.current.snapTo(0)
     }
     const onStartRouteClick = () =>{
         setIsRouting(true)
         setTrackingOption(true)
         bs.current.snapTo(1)
+        bs2.current.snapTo(1)
+    }
+    const onCancelRouteClick = () =>{
+        setIsRouting(false)
+        setTrackingOption(false)
+        setDestination(null)
+        bs2.current.snapTo(1)
+        
     }
     
     const onOpinionClick = (stars, isFavorite) =>{
@@ -244,6 +264,12 @@ const MapScreen = ({navigation}) => {
             <BackGround/>
             <Header title ="MAPA"/>
             {classification != null ? <ClassificationPopUp destination = {destination} isVisible = {classificatonVisibily} classification = {classification} onOpinionClick = {onOpinionClick} onCancel = {onEvaluationBack}/>: null}
+            <SuccessModal 
+            text = "Yeei, chegaste ao teu destino!"
+            icon = {<ReachedDestinationIcon width = {100} height = {100}/>}
+            isModalVisible = {isSuccessVisible}
+            setModalVisible = {setSuccessVisible}
+            />
             <View style = {styles.googleMapsContainer}>
                 <DestinationSearch setRegion = {setRegion}/>
                 <View style = {styles.mapContainer}>
@@ -254,6 +280,13 @@ const MapScreen = ({navigation}) => {
                     onDirectionsClick= {onDirectionsClick}
                     onStartRouteClick = {onStartRouteClick}
                     onEvaluateClick = {onEvaluateClick}
+                    />
+                    <StartRoutePopUp 
+                    ref = {bs2} 
+                    fall ={fall2}
+                    destination = {destination}
+                    onCancelRouteClick = {onCancelRouteClick}
+                    onStartRouteClick = {onStartRouteClick}
                     />
                     <GoogleMaps 
                         isTracking = {isTracking}

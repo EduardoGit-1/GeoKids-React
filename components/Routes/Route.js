@@ -7,9 +7,11 @@ import DistanceIcon from '../Icons/DistanceIcon'
 import DurationIcon from '../Icons/DurationIcon'
 import TrackIcon from '../Icons/TrackIcon'
 import envs from '../../config/env'
+import avatars from '../../assets/login/characters/AvatarsSVG'
+import Avatar from '../Common/Avatar'
 const {GOOGLE_API_KEY} = envs
 
-const Route = ({origin, destination, distance, duration}) =>{
+const Route = ({origin, destination, distance, duration, avatarIndex}) =>{
     const mapRef = useRef(null)
     const onMapReady = () =>{
         mapRef.current.fitToCoordinates([origin, destination], { edgePadding: null, animated: false })
@@ -27,7 +29,10 @@ const Route = ({origin, destination, distance, duration}) =>{
                     onMapReady = {onMapReady}
                 >
                     <Marker coordinate = {origin}>
-                            <Image style = {styles.customMarker} source = {require('../../assets/characterTeste.png')}/>
+                        <View style = {styles.customMarker}>
+                            <Avatar logo = {avatars[avatarIndex]} width = {35} height = {35}/>
+                            {/* <Image style = {styles.customMarker} source = {require('../../assets/characterTeste.png')}/> */}
+                        </View> 
                     </Marker> 
                     <Marker coordinate = {destination}/>
                     <MapViewDirections 
@@ -138,6 +143,9 @@ const styles = StyleSheet.create({
         justifyContent: "space-between"
     },
     customMarker:{
+        alignItems:'center',
+        justifyContent: 'center',
+        overflow: 'hidden',
         width: 40, 
         height: 40, 
         borderRadius: 40/ 2,

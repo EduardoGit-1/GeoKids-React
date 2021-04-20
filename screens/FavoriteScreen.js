@@ -15,7 +15,7 @@ const FavoriteScreen = ({navigation}) =>{
         })
     },[])
     const renderItem = ({item}) =>(
-        <FavoritePlace destination = {item.destination} stars = {item.stars} isFavorite = {item.isFavorite} navigation = {navigation}/>
+        <FavoritePlace destination = {item.destination} stars = {item.stars} isFavorite = {item.isFavorite} answers = {item.answers} navigation = {navigation}/>
     )
 
     return(
@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
     },
     placeContainer:{
         height:580,
+        width: 350,
     },
 
 })

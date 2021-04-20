@@ -209,6 +209,13 @@ export const removeUploads = async() =>{
         console.log(error)
     }
 }
+export const removeRoutes = async() =>{
+    try {
+        AsyncStorage.removeItem("routes")
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 export const removeEverything = async () =>{
     try {

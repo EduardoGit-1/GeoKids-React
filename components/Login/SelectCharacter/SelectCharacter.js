@@ -4,34 +4,33 @@ import PreviousButton from '../../Common/PreviousButton'
 import NextButton from '../../Common/NextButton'
 import PreviousArrow from '../../Common/PreviousArrow'
 import NextArrow from '../../Common/NextArrow'
-import {characters} from '../../../assets/login/characters/Characters'
-import axiosInstance from '../../../helpers/axiosInstance'
+import characters from '../../../assets/login/characters/CharactersSVG'
+import CharacterImage from './CharacterImage'
 
-var imgID = 0
+// let imgID = 0
 const Character = ({state, setCharacter, setStep, signUp}) =>{
-    const [imgSrc, setImgSrc] = useState(characters[state.characterID])
+    let imgID = state.characterID
+    //const [imgID, setImageID] = useState(state.characterID)
     const [isArrowVisible, setArrowVisible] = useState(true)
     
-    
     const nextImg = () =>{
+        //setImageID(imgID + 1)
         imgID += 1
-        console.log("Next image: " + imgID)
         if(imgID > characters.length - 1){
+            //setImageID(0)
             imgID = 0
         }
-        setImgSrc(characters[imgID])
+        
         setCharacter(imgID)
     }
 
     const previousImg = () =>{
         imgID -= 1
-        console.log("Previous image: " + imgID)
+        //setImageID(imgID - 1)
         if(imgID < 0){
             imgID = characters.length - 1
-            console.log(imgID)
+            //setImageID(characters.length - 1)
         }
-
-        setImgSrc(characters[imgID])
         setCharacter(imgID)
     }
 
@@ -43,7 +42,7 @@ const Character = ({state, setCharacter, setStep, signUp}) =>{
         setStep(state.step - 1)
     }
     const nextForm = () =>{
-        signUp()
+        setStep(state.step + 1)
     }
 
     const leftArrow = (show) =>{
@@ -72,11 +71,14 @@ const Character = ({state, setCharacter, setStep, signUp}) =>{
     let right = rightArrow(isArrowVisible);
     return(
         <View style = {styles.container}>
-            <Text style={styles.title}>Escolhe o teu boneco!</Text>
+            <Text style={styles.title}>Escolhe a tua personagem:</Text>
             <View style={styles.characterContainer}>
                 {left}
-                <TouchableOpacity  onPress={selectImage}>
+                {/* <TouchableOpacity  onPress={selectImage}>
                     <Image style = {styles.character} source ={imgSrc}/>
+                </TouchableOpacity> */}
+                <TouchableOpacity  onPress={selectImage}>
+                    <CharacterImage width = {50} height = {170} logo = {characters[imgID]} index = {imgID}/>
                 </TouchableOpacity>
                 {right}
             </View>

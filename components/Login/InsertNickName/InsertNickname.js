@@ -3,29 +3,42 @@ import {View, Text, StyleSheet, Image, TextInput, Button} from 'react-native';
 import NickNameIcon from './Icons/NickNameIcon'
 import NextButton from '../../Common/NextButton'
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import PreviousButton from '../../Common/PreviousButton';
 
 
-const InsertNickname = ({state, setNickname, setStep}) =>{
+const InsertNickname = ({state, setNickname, setStep, signUp}) =>{
     const onChangeText = textValue =>{
         setNickname(textValue);
     }
-    const nextForm = () =>{
-        setStep(state.step + 1)
+    const previousForm = () =>{
+        setStep(state.step - 1)
     }
     return (
         <View style = {styles.box}>
             <NickNameIcon width = '70' height = '70'/>
-            <Text style={styles.title}>Escolhe um nickname divertido:</Text>
-            <TextInput
-            style={styles.nickNameInput}
-            onChangeText={onChangeText}
-            />
-            <View style = {{alignSelf: 'flex-end',marginRight : 30}}>
-                <TouchableOpacity style = {{alignItems : 'center',flexDirection: 'row'}} onPress = {nextForm}>
-                    <Text style = {styles.buttonText}>Próximo</Text>
-                    <NextButton width = {27} height = {27} />
-                </TouchableOpacity>
+            <Text style={styles.title}>Dá um nome à tua personagem:</Text>
+            <View style = {{marginTop: 20}}>
+                <TextInput
+                style={styles.nickNameInput}
+                onChangeText={onChangeText}
+                />
             </View>
+
+            <View style = {{flexDirection : 'row', justifyContent:'space-between', marginTop: 47}}>
+                <View style = {{marginRight : 50}}>
+                    <TouchableOpacity style = {{alignItems : 'center',flexDirection: 'row'}} onPress = {previousForm}>
+                    <PreviousButton width = {27} height = {27} />
+                        <Text style = {[styles.buttonText, {marginLeft: 10}]}>Anterior</Text>
+                    </TouchableOpacity>
+                </View>
+                <View>
+                    <TouchableOpacity style = {{alignItems : 'center',flexDirection: 'row'}} onPress = {signUp}>
+                        <Text style = {[styles.buttonText, {marginRight: 10}]}>Próximo</Text>
+                        <NextButton width = {27} height = {27} />
+                    </TouchableOpacity>
+                </View>
+            </View>
+
         </View>    
 
         )
@@ -60,7 +73,7 @@ const styles = StyleSheet.create({
     buttonText: {
         fontFamily : 'Lexa-Mega',
         fontSize : 12,
-        marginRight : 10,
+
     }
 })
 export default InsertNickname

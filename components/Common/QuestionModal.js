@@ -1,7 +1,7 @@
 import {Modal, StyleSheet, View, Text, TouchableOpacity} from 'react-native'
 import React from 'react';
 import WarningIcon from '../Common/Logos/WarningIcon'
-import OkIcon from './Logos/OkIcon';
+import OkIcon from '../Icons/OkIcon';
 
 const QuestionModal = ({text, onSuccess, onCancel, isModalVisible}) =>{
     return(

@@ -2,11 +2,10 @@ import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import React, {useState} from 'react';
-import DirectionsIcon from '../Icons/DirectionsIcon';
 import StartRouteIcon from '../Icons/StartRouteIcon';
-import FavoritesLogo from '../Logos/FavoritesLogo'
+import CancelIcon from '../Icons/CancelIcon';
 
-const DirectionsPopUp = React.forwardRef(({fall, destination, onDirectionsClick, onStartRouteClick, onEvaluateClick}, ref) => {
+const StartRoutePopUp = React.forwardRef(({fall, destination, onStartRouteClick, onCancelRouteClick}, ref) => {
   const [currentFont, setCurrentFont] = useState(12);  
   const renderInner = () => (
         <View style = {styles.content}>
@@ -24,25 +23,16 @@ const DirectionsPopUp = React.forwardRef(({fall, destination, onDirectionsClick,
                 >{destination != null ? destination.designation : "A carregar..."}</Text>
             </View>
             <View style = {[styles.buttonContainer]}>
-              {destination != null && ("placeID" in destination) ?
-                <TouchableOpacity onPress = {onEvaluateClick} style = {styles.touchable} >
-                <View style = {styles.button}>
-                    <FavoritesLogo width = {15} height = {15}/>
-                    <Text style = {[styles.text, {padding: 8}]}>Avaliar</Text>
-                </View>
-              </TouchableOpacity>
-              :null
-              }
-                <TouchableOpacity onPress = {onDirectionsClick} style = {styles.touchable} >
-                    <View style = {styles.button}>
-                        <DirectionsIcon width = {15} height = {15}/>
-                        <Text style = {styles.text}>Direções</Text>
-                    </View>
-                </TouchableOpacity>
                 <TouchableOpacity onPress = {onStartRouteClick} style = {styles.touchable}>
                     <View style = {styles.button}>
                         <StartRouteIcon width = {15} height = {15}/>
                         <Text style = {[styles.text, {padding: 8}]}>Iniciar</Text>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress = {onCancelRouteClick} style = {styles.touchable} >
+                    <View style = {styles.button}>
+                        <CancelIcon width = {17} height = {17}/>
+                        <Text style = {styles.text}>Cancelar</Text>
                     </View>
                 </TouchableOpacity>
             </View>
@@ -60,7 +50,7 @@ const DirectionsPopUp = React.forwardRef(({fall, destination, onDirectionsClick,
     return(
             <BottomSheet
             ref={ref}
-            snapPoints={[160, 0]}
+            snapPoints={[130, 0]}
             renderContent={renderInner}
             renderHeader={renderHeader}
             enabledContentGestureInteraction={false}
@@ -119,7 +109,6 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 1,
         right: 3,
-        
       },
       touchable:{
         padding : 3
@@ -136,4 +125,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default DirectionsPopUp
+export default StartRoutePopUp

@@ -1,19 +1,24 @@
 import React, {useContext} from 'react'
 import {View, Text, StyleSheet, ScrollView,Image} from 'react-native'
-import {DrawerItem, DrawerItemList} from '@react-navigation/drawer';
+import {DrawerItem, DrawerItemList, DrawerContentScrollView } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import {GlobalContext} from '../../context/Provider'
+import Avatar from '../Common/Avatar'
+import avatars from '../../assets/login/characters/AvatarsSVG'
 
 const Sidebar = props =>{
     const {authState:{user}} = useContext(GlobalContext)
     const { state, ...rest } = props;
     const newState = { ...state}
-    newState.routes = newState.routes.filter(item => item.name !== 'Opiniões' && item.name !== 'Uploads')
+    newState.routes = newState.routes.filter(item => item.name !== "Opiniões" && item.name !== "Uploads")
     return(
         <ScrollView style={styles.scrollView}>
             <View style = {styles.header}>
                 <Text style = {styles.title}>MENU</Text>
-                <Image style = {styles.profile} source = {require('../../assets/characterTeste.png')}/>
+                <View style = {styles.profile}>
+                    <Avatar width = {110} height = {110} logo = {avatars[user.characterID]}/>
+                </View>
+                    {/* <Image style = {styles.profile} source = {require('../../assets/characterTeste.png')}/> */}
                 <Text style = {styles.nickname}>{user.nickname}</Text>
             </View>
             <View style = {styles.container}>
@@ -39,6 +44,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#E6EEF9'
     },
     profile:{
+        alignItems:'center',
+        justifyContent: 'center',
+        overflow: 'hidden',
         width : 120,
         height : 120,
         borderRadius:60,

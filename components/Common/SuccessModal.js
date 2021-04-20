@@ -1,24 +1,23 @@
-import {Modal, StyleSheet, Pressable, View, Text, TouchableOpacity} from 'react-native'
+import {Modal, StyleSheet, View, Text, TouchableOpacity} from 'react-native'
 import React from 'react';
-import WarningIcon from '../Common/Logos/WarningIcon'
 import OkIcon from '../Icons/OkIcon';
 
-const WarningModal = ({text, onClose, modalVisible}) =>{
+const SuccessModal = ({text, setModalVisible, isModalVisible, icon}) =>{
 
     return(
         <Modal
         animationType="slide"
         transparent={true}
-        visible={modalVisible}
+        visible={isModalVisible}
         onRequestClose={() => {
-            onClose()
+          setModalVisible(false)
         }}
       >
         <View style={styles.container}>
           <View style={styles.modal}>
-            <WarningIcon width = {80} height = {80}/>
+            {icon}
             <Text style={styles.text}>{text}</Text>
-            <TouchableOpacity onPress = {() => onClose()}>
+            <TouchableOpacity style = {{alignSelf: 'flex-end'}}onPress = {() => setModalVisible(false)}>
               <View style = {styles.buttonContainer}>
                 <OkIcon width = {35} height = {35}/>
                 <Text style = {{fontFamily: 'Lexa-Mega', fontSize: 15, color : 'white'}}>Ok!</Text>
@@ -30,7 +29,7 @@ const WarningModal = ({text, onClose, modalVisible}) =>{
     )
 }
 
-export default WarningModal
+export default SuccessModal
 const styles = StyleSheet.create({
     container:{
         flex:1,
@@ -43,7 +42,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#BACEE8",
         borderRadius : 10,
         borderWidth : 1,
-        padding: 35,
+        padding: 15,
         alignItems: "center",
         shadowColor: "#000",
         shadowOffset: {

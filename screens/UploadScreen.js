@@ -174,7 +174,7 @@ const UploadScreen = ({navigation, route}) =>{
                 setModalVisible= {setTextInputVisible}
                 onTextSendClick = {onTextSendClick}
                 /> 
-            <View style = {{height : 600}}>
+            <View style = {{height : 590}}>
 
               <SectionList
               sections={DATA}

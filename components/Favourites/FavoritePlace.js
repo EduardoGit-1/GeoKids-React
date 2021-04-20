@@ -8,8 +8,10 @@ import StarIcon from '../Icons/StarIcon'
 import FavoritesHeartIcon from '../Icons/FavoritesHeartIcon'
 import CheckBoxIcon from '../Icons/CheckBoxIcon'
 import UploadLogo from '../Logos/UploadLogo'
+import answersInitialState from '../../context/initialStates/answersInitialState'
 
-const FavoritePlace = ({destination, stars, isFavorite, navigation}) =>{
+const FavoritePlace = ({destination, stars, isFavorite, answers, navigation}) =>{
+    console.log(answers)
     const mapRef = useRef(null)
     const onMapReady = () =>{
         mapRef.current.fitToCoordinates([destination], { edgePadding: null, animated: false })
@@ -55,28 +57,27 @@ const FavoritePlace = ({destination, stars, isFavorite, navigation}) =>{
             <View style = {{flexDirection: 'row', justifyContent:'space-between'}}>
                 <View style = {{padding:5, marginTop: 10}}>
                     <View style = {styles.answerContainer}>
-                        <CheckBoxIcon width = {20} height = {20}/>
+                        <CheckBoxIcon width = {20} height = {20} value = {answers.isPlayfull}/>
                         <Text style = {styles.text}>Brincar</Text>
                     </View>
                     <View style = {styles.answerContainer}>
-                        <CheckBoxIcon width = {20} height = {20}/>
+                        <CheckBoxIcon width = {20} height = {20} value = {answers.hasAnimals}/>
                         <Text style = {styles.text}>Animais</Text>
                     </View>
                     <View style = {styles.answerContainer}>
-                        <CheckBoxIcon width = {20} height = {20}/>
+                        <CheckBoxIcon width = {20} height = {20} value = {answers.isNear}/>
                         <Text style = {styles.text}>Perto de casa</Text>
                     </View>
                 </View>
-                <View style = {{padding:5, marginTop: 10}}>
+                <View style = {{padding:5, marginTop: 10}} >
                     <View style = {styles.answerContainer}>
-                        <CheckBoxIcon width = {20} height = {20}/>
+                        <CheckBoxIcon width = {20} height = {20} value = {answers.isSunny}/>
                         <Text style = {styles.text}>Sol</Text>
                     </View>
                     <View style = {styles.answerContainer}>
-                        <CheckBoxIcon width = {20} height = {20}/>
+                        <CheckBoxIcon width = {20} height = {20} value = {answers.hasShadow}/>
                         <Text style = {styles.text}>Sombra</Text>
                     </View>
-
                 </View>
             </View>
             <TouchableOpacity style = {{padding:10}} onPress={onSeeUploadsClick}>
@@ -136,7 +137,8 @@ const styles = StyleSheet.create({
     text:{
         fontFamily: 'Lexa-Mega',
         marginLeft: 10,
-        fontSize: 11
+        
+        fontSize: 12
     },
 
     pathContainer:{
@@ -148,7 +150,8 @@ const styles = StyleSheet.create({
     },
     answerContainer:{
         flexDirection : 'row',
-        padding:5
+        padding:5,
+        alignItems:'center',
     },
     uploadButton:{
         alignSelf:'center',
