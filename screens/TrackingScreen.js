@@ -1,12 +1,18 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {View, StyleSheet,StatusBar, FlatList} from 'react-native';
 import BackGround from '../components/Common/BackGround'
 import Header from '../components/Common/Header'
 import MenuButton from '../components/Common/MenuButton'
 import Route from '../components/Routes/Route';
 import {GlobalContext} from '../context/Provider'
+import {loadRoutes} from '../context/storage/AsyncStorage'
 const TrackingScreen = ({navigation}) =>{
-    const {routeState} = useContext(GlobalContext)
+    const {routeState, routeDispatch} = useContext(GlobalContext)
+    useEffect(()=>{
+        loadRoutes().then(routes => 
+            routeDispatch({type:'GET_ROUTES_SUCCESS', payload: routes})
+        )
+    },[])
     const renderItem = ({item}) =>(
         <Route origin = {item.origin} destination = {item.destination} duration = {item.duration} distance = {item.distance}/>
     )

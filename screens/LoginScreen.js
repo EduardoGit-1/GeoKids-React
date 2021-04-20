@@ -14,20 +14,11 @@ const Login = ({Drawer}) =>{
     const [characterID, setCharacterID] = useState(0)
     const [nickname, setNickname] = useState('')
     const [modalVisible, setModalVisible] = useState(false)
-    const {authDispatch, routeDispatch, favouritesDispatch,authState:{isLoggedIn}} = useContext(GlobalContext)
+    const {authDispatch,authState:{isLoggedIn}} = useContext(GlobalContext)
     useEffect(() =>{
         loadUser().then(authState => 
                 authDispatch({type:'LOGIN', payload: authState})
-            ).then(() => {
-                loadRoutes().then(routes => 
-                    routeDispatch({type:'GET_ROUTES_SUCCESS', payload: routes})
-                )
-            }).then(() =>{
-                loadFavourites().then(favourites => {
-                    console.log(favourites)
-                    favouritesDispatch({type:'GET_FAVORITES_SUCCESS', payload: favourites})
-                })
-            })
+            )
     }, [])
     // removeUser()
     

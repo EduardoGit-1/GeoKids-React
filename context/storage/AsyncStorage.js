@@ -119,7 +119,7 @@ export const saveImageUpload = async(destination, image) =>{
                 u[uploadIndex].images.push(image);
                 AsyncStorage.setItem('uploads', JSON.stringify(u))
             }else{
-                let upload = {destination, images: [image], videos: [], audios: []}
+                let upload = {destination, images: [image], videos: [], audios: [], texts:[]}
                 u.push(upload)
                 AsyncStorage.setItem('uploads', JSON.stringify(u))
             }
@@ -138,7 +138,7 @@ export const saveVideoUpload = async(destination, video) =>{
                 u[uploadIndex].videos.push(video)
                 AsyncStorage.setItem('uploads', JSON.stringify(u))
             }else{
-                let upload = {destination, images: [], videos: [video], audios: []}
+                let upload = {destination, images: [], videos: [video], audios: [], texts: []}
                 u.push(upload)
                 AsyncStorage.setItem('uploads', JSON.stringify(u))
             }
@@ -157,7 +157,7 @@ export const saveAudioUpload = async(destination, audio) =>{
                 u[uploadIndex].audios.push(audio)
                 AsyncStorage.setItem('uploads', JSON.stringify(u))
             }else{
-                let upload = {destination, images: [], videos: [], audios : [audio]}
+                let upload = {destination, images: [], videos: [], audios : [audio], texts: []}
                 u.push(upload)
                 AsyncStorage.setItem('uploads', JSON.stringify(u))
             }
@@ -166,6 +166,25 @@ export const saveAudioUpload = async(destination, audio) =>{
         alert(error)
     }
 }
+export const saveTextUpload = async(destination, text) =>{
+    try {
+        AsyncStorage.getItem('uploads').then(uploads =>{
+            const u = uploads ? JSON.parse(uploads) : [];
+            let uploadIndex = u.findIndex(upload => upload.destination.placeID === destination.placeID)
+            if(uploadIndex != -1){
+                u[uploadIndex].texts.push(text)
+                AsyncStorage.setItem('uploads', JSON.stringify(u))
+            }else{
+                let upload = {destination, images: [], videos: [], audios : [], texts : [text]}
+                u.push(upload)
+                AsyncStorage.setItem('uploads', JSON.stringify(u))
+            }
+        })
+    } catch(error) {
+        alert(error)
+    }
+}
+
 
 export const getUploads = async(placeID) => {
     try {
@@ -177,7 +196,7 @@ export const getUploads = async(placeID) => {
                 return f
             }
         }
-        return {images: [], videos : [], audios : []}
+        return {images: [], videos : [], audios : [], texts: []}
     } catch (error) {
         console.log(error)
     }

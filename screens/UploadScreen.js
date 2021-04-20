@@ -16,16 +16,20 @@ import uploadReducer from '../context/reducers/uploadsReducer'
 import sendImage from '../context/actions/uploads/addImage'
 import sendVideo from '../context/actions/uploads/addVideo'
 import sendAudio from '../context/actions/uploads/addAudio'
+import sendText from '../context/actions/uploads/addText'
 import {getUploads} from '../context/storage/AsyncStorage' 
 import RecordAudioComponent from '../components/Uploads/RecordAudioComponent';
 import AudioComponent from '../components/Uploads/AudioComponent';
+import AddTextComponent from '../components/Uploads/AddTextComponent';
+import TextComponent from '../components/Uploads/TextComponent';
 
 const UploadScreen = ({navigation, route}) =>{
   const {authState:{user}} = useContext(GlobalContext)
-  const [uploadState, uploadDispatch] = useReducer(uploadReducer, {images: [], videos : [], audios: []})
+  const [uploadState, uploadDispatch] = useReducer(uploadReducer, {images: [], videos : [], audios: [], texts:[]})
   const {destination} = route.params;
   const [recording, setRecording] = useState(null)
   const [isRecordingVisible, setRecordingVisible] = useState(false)
+  const [isTextInputVisible, setTextInputVisible] = useState(false)
   const bs = useRef(null);
   const fall = new Animated.Value(1);
   useEffect(()=>{
@@ -50,6 +54,10 @@ const UploadScreen = ({navigation, route}) =>{
     {
       title: 'Audio',
       data: uploadState.audios
+    },
+    {
+      title: 'Texto',
+      data: uploadState.texts
     }
   ]
     const renderItem = ({item}) =>{
@@ -57,8 +65,10 @@ const UploadScreen = ({navigation, route}) =>{
           return (<ImageComponent image = {item.data}/>)
         }else if (item.type === "video"){
           return (<VideoComponent video = {item.data}/>)
-        }else{
+        }else if (item.type === "audio"){
           return (<AudioComponent audio = {item.data}/>)
+        }else{
+          return (<TextComponent text = {item.data}/>)
         }
       }
 
@@ -92,7 +102,7 @@ const UploadScreen = ({navigation, route}) =>{
         if(result.type === "video"){
           console.log(result.uri)
         }else{
-          console.log(result.uri)
+          sendImage(destination, user.id, result.uri)(uploadDispatch)
         }
       }
     }
@@ -119,7 +129,15 @@ const UploadScreen = ({navigation, route}) =>{
       setRecordingVisible(true);
       bs.current.snapTo(1)
     }
-  
+    const onAddTextPress = () =>{
+      setTextInputVisible(true);
+      bs.current.snapTo(1)
+    }
+
+    const onTextSendClick = (text) => {
+      sendText(destination, user.id, text)(uploadDispatch)
+      setTextInputVisible(false)
+}
     async function stopRecording() {
       console.log('Stopping recording..');
       setRecording(undefined);
@@ -143,13 +161,19 @@ const UploadScreen = ({navigation, route}) =>{
               onGalleryPress = {pickImage}
               onCameraPress = {useCamera}
               onAudioPress = {onAudioPress}
+              onAddTextPress = {onAddTextPress}
             />
              <RecordAudioComponent 
               recording = {recording} 
               isModalVisibile = {isRecordingVisible} 
               setModalVisible= {setRecordingVisible}
               startRecording = {startRecording}
-              stopRecording = {stopRecording}/> 
+              stopRecording = {stopRecording}/>
+              <AddTextComponent 
+                isModalVisibile = {isTextInputVisible} 
+                setModalVisible= {setTextInputVisible}
+                onTextSendClick = {onTextSendClick}
+                /> 
             <View style = {{height : 600}}>
 
               <SectionList

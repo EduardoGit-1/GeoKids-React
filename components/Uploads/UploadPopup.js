@@ -9,7 +9,7 @@ import MicrophoneIcon from '../Icons/MicrophoneIcon';
 
 
 
-const UploadPopup = React.forwardRef(({fall, onGalleryPress, onCameraPress, onAudioPress}, ref) => {
+const UploadPopup = React.forwardRef(({fall, onGalleryPress, onCameraPress, onAudioPress, onAddTextPress}, ref) => {
     const renderInner = () => (
         <View style = {styles.content}>
             <View style = {{flexWrap: 'nowrap', padding:10,}}>
@@ -34,7 +34,7 @@ const UploadPopup = React.forwardRef(({fall, onGalleryPress, onCameraPress, onAu
                         <Text style = {[styles.text,{paddingLeft: 16}]}>Gravar áudio</Text>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity style = {styles.touchable}>
+                <TouchableOpacity style = {styles.touchable} onPress = {onAddTextPress}>
                     <View style = {styles.button}>
                         <TextIcon width = {27} height = {27}/>
                         <Text style = {[styles.text, {marginLeft: 16}]}>Texto</Text>

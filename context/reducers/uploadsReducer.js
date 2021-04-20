@@ -21,6 +21,13 @@ const uploadReducer = (state, {type, payload}) =>{
                 ...state,
                 audios: audios
             }
+        case 'REGISTER_TEXT_SUCCESS':
+            let texts = state.texts;
+            texts.push(payload)
+            return{
+                ...state,
+                texts: texts
+            }
         case 'REGISTER_FAIL':
             return {
                 ...state,

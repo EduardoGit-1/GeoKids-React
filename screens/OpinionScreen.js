@@ -1,5 +1,6 @@
-import React, { useState, useReducer} from 'react';
+import React, {useReducer, useContext} from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity, StatusBar} from 'react-native';
+import {GlobalContext} from '../context/Provider'
 import answersReducer from '../context/reducers/answersReducer'
 import Header from '../components/Common/Header';
 import PreviousButton from '../components/Common/PreviousButton'
@@ -15,6 +16,7 @@ import saveOpinion from '../context/actions/favorites/saveOpinion'
 const OpinionScreen = ({navigation, route}) =>{
     const {destination, userID, stars, isFavorite, answers} = route.params
     const [answersState, answersDispatch] = useReducer(answersReducer, answers)
+    const {favouritesDispatch} = useContext(GlobalContext)
     console.log(answersState)
     const updateAnswersState = (payload) =>{
         answersDispatch({
@@ -31,7 +33,7 @@ const OpinionScreen = ({navigation, route}) =>{
             answers : answersState,
             destination: destination
         }
-        saveOpinion(data)
+        saveOpinion(data)(favouritesDispatch)
         navigation.navigate("Favoritos")
     }
     return(

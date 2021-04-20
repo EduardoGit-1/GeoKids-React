@@ -5,10 +5,15 @@ import Header from '../components/Common/Header'
 import MenuButton from '../components/Common/MenuButton'
 import {GlobalContext} from '../context/Provider'
 import FavoritePlace from '../components/Favourites/FavoritePlace'
+import {loadFavourites} from '../context/storage/AsyncStorage'
 
 const FavoriteScreen = ({navigation}) =>{
-    const {favouritesState} = useContext(GlobalContext)
-
+    const {favouritesState, favouritesDispatch} = useContext(GlobalContext)
+    useEffect(()=>{
+        loadFavourites().then(favourites => {
+            favouritesDispatch({type:'GET_FAVORITES_SUCCESS', payload: favourites})
+        })
+    },[])
     const renderItem = ({item}) =>(
         <FavoritePlace destination = {item.destination} stars = {item.stars} isFavorite = {item.isFavorite} navigation = {navigation}/>
     )
@@ -19,7 +24,7 @@ const FavoriteScreen = ({navigation}) =>{
             <BackGround/>
             <Header title ="FAVORITOS"/>
             <View style = {styles.placeContainer}>
-                {favouritesState.favourites !== [] ?
+                {favouritesState != null ?
                         <FlatList
                             style = {styles.scrollView} 
                             data = {favouritesState.favourites}
