@@ -60,6 +60,7 @@ export const saveClassification = async(place) =>{
     try {
         AsyncStorage.getItem('favorites').then(favorites =>{
             const f = favorites ? JSON.parse(favorites) : [];
+            //console.log(`Save classification on : ${f}`)
             let favoriteIndex = f.findIndex(favorite => favorite.destination.placeID === place.destination.placeID)
             if(favoriteIndex != -1){
                 f[favoriteIndex] = place
@@ -92,6 +93,7 @@ export const getFavoritePlace = async(placeID) => {
     try {
 
         let favorites = await AsyncStorage.getItem('favorites')
+ 
         if(favorites != null){
             favorites = JSON.parse(favorites)
             let f = favorites.find(favorite => favorite.destination.placeID === placeID)

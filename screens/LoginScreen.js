@@ -7,21 +7,28 @@ import Navigator from '../components/Navigation/Navigator'
 import register from '../context/actions/auth/registerUser'
 import WarningModal from '../components/Common/WarningModal';
 import {GlobalContext} from '../context/Provider'
-import {loadUser,loadRoutes,loadFavourites, removeUser} from '../context/storage/AsyncStorage'
+import {loadUser,removeUploads,removeFavorites, removeUser, removeRoutes, loadFavourites} from '../context/storage/AsyncStorage'
 import WarningIndex from '../components/Login/WarningIndex';
 import WarningIcon from '../components/Common/Logos/WarningIcon';
 
 const Login = ({Drawer}) =>{
-    removeUser()
+    // removeFavorites()
+    // removeUploads()
+    // removeRoutes()
+    // removeUser()
     const [step, setStep] = useState(1)
     const [characterID, setCharacterID] = useState(0)
     const [nickname, setNickname] = useState('')
     const [modalVisible, setModalVisible] = useState(false)
-    const {authDispatch,authState:{isLoggedIn}} = useContext(GlobalContext)
+    const {authDispatch, favouritesDispatch, authState:{isLoggedIn}} = useContext(GlobalContext)
     useEffect(() =>{
         loadUser().then(authState => 
                 authDispatch({type:'LOGIN', payload: authState})
-            )
+            ).then(()=>{
+                loadFavourites().then(favourites => 
+                    favouritesDispatch({type:'GET_FAVORITES_SUCCESS', payload: favourites})
+                )
+            })
     }, [])
  
     

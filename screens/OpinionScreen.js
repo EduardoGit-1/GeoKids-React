@@ -1,4 +1,4 @@
-import React, {useReducer, useContext} from 'react';
+import React, {useReducer, useContext, useEffect} from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity, StatusBar} from 'react-native';
 import {GlobalContext} from '../context/Provider'
 import answersReducer from '../context/reducers/answersReducer'
@@ -13,9 +13,17 @@ import HouseQuestion from '../components/Opinion/HouseQuestion';
 import SunQuestion from '../components/Opinion/SunQuestion';
 import ShadowQuestion from '../components/Opinion/ShadowQuestion';
 import saveOpinion from '../context/actions/favorites/saveOpinion'
+
+
 const OpinionScreen = ({navigation, route}) =>{
     const {destination, userID, stars, isFavorite, answers} = route.params
     const [answersState, answersDispatch] = useReducer(answersReducer, answers)
+    useEffect(()=>{
+        answersDispatch({
+            type: 'GET_ANSWERS',
+            payload: answers
+        })
+    }, [answers])
     const {favouritesDispatch} = useContext(GlobalContext)
     console.log(answersState)
     const updateAnswersState = (payload) =>{
@@ -33,8 +41,7 @@ const OpinionScreen = ({navigation, route}) =>{
             answers : answersState,
             destination: destination
         }
-        saveOpinion(data)(favouritesDispatch)
-        navigation.navigate("Favoritos")
+        saveOpinion(data, navigation)(favouritesDispatch)
     }
     return(
         <View style = {styles.container}>

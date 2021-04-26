@@ -7,9 +7,13 @@ const favoritesReducer = (state, {type, payload}) =>{
             }
         case 'REGISTER_PLACE_SUCCESS':
             let favourites = state.favourites;
-            let placeIndex = favourites.findIndex(place => place.id === payload.id)
-            if(placeIndex != -1){
-                favourites[placeIndex] = payload
+            if(favourites.length !== 0){
+                let placeIndex = favourites.findIndex(place => place.destination.placeID === payload.destination.placeID)
+                if(placeIndex > -1) {
+                    favourites[placeIndex] = payload
+                }else{
+                    favourites.push(payload) 
+                }
             }else{
                 favourites.push(payload)
             }

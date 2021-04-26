@@ -10,7 +10,7 @@ export const GlobalContext = createContext({});
 const GlobalProvider = ({children}) =>{
     const [authState, authDispatch] = useReducer(authReducer, authInitialState)
     const [routeState, routeDispatch] = useReducer(routeReducer, initialRouteState)
-    const [favouritesState, favouritesDispatch] = useReducer(favoritesReducer, null)
+    const [favouritesState, favouritesDispatch] = useReducer(favoritesReducer, {favourites:[], loading: false})
 
     return (
         <GlobalContext.Provider value = {{authState, authDispatch, routeState, routeDispatch, favouritesState, favouritesDispatch}}>

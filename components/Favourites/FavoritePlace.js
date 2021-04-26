@@ -11,7 +11,7 @@ import UploadLogo from '../Logos/UploadLogo'
 import answersInitialState from '../../context/initialStates/answersInitialState'
 
 const FavoritePlace = ({destination, stars, isFavorite, answers, navigation}) =>{
-    console.log(answers)
+
     const mapRef = useRef(null)
     const onMapReady = () =>{
         mapRef.current.fitToCoordinates([destination], { edgePadding: null, animated: false })

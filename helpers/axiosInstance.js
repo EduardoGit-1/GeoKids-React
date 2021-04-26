@@ -4,4 +4,5 @@ const axiosInstance = axios.create({
     baseURL: envs.DEV_BACKEND_URL,
 })
 
+
 export default axiosInstance

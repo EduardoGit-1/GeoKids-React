@@ -5,6 +5,10 @@ const answersReducer = (state, {type, payload}) =>{
                 ...state,
                 ...payload
             }
+        case 'GET_ANSWERS':
+            return {
+                ...payload
+            }
         default:
             return state
     }

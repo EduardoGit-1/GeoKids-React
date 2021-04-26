@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext,useState } from 'react';
 import {View, Text, StyleSheet, Image, StatusBar, FlatList} from 'react-native';
 import BackGround from '../components/Common/BackGround'
 import Header from '../components/Common/Header'
@@ -8,15 +8,13 @@ import FavoritePlace from '../components/Favourites/FavoritePlace'
 import {loadFavourites} from '../context/storage/AsyncStorage'
 
 const FavoriteScreen = ({navigation}) =>{
-    const {favouritesState, favouritesDispatch} = useContext(GlobalContext)
-    useEffect(()=>{
-        loadFavourites().then(favourites => {
-            favouritesDispatch({type:'GET_FAVORITES_SUCCESS', payload: favourites})
-        })
-    },[])
+    const {favouritesState} = useContext(GlobalContext)
+    const [refresh, setRefresh] = useState(false)
+
     const renderItem = ({item}) =>(
         <FavoritePlace destination = {item.destination} stars = {item.stars} isFavorite = {item.isFavorite} answers = {item.answers} navigation = {navigation}/>
     )
+
 
     return(
         <View style = {styles.container}>
@@ -24,16 +22,13 @@ const FavoriteScreen = ({navigation}) =>{
             <BackGround/>
             <Header title ="FAVORITOS"/>
             <View style = {styles.placeContainer}>
-                {favouritesState != null ?
-                        <FlatList
-                            style = {styles.scrollView} 
-                            data = {favouritesState.favourites}
-                            renderItem = {renderItem}
-                            keyExtractor={item => item.id}
-                        />
-                :
-                null
-                }
+                <FlatList
+                    style = {styles.scrollView} 
+                    data = {favouritesState.favourites}
+                    extraData = {favouritesState.loading}
+                    renderItem = {renderItem}
+                    keyExtractor={item => item.id}
+                />
             </View>
             <MenuButton width = '35' height = '35' navigation = {navigation}/>
         </View>

@@ -15,8 +15,13 @@ const registerClassification = (classification) => (dispatch) =>{
             type: 'REGISTER_PLACE_SUCCESS',
             payload: response.data
         })
-
+    }).then(()=>{
+        dispatch({
+            type:'SET_LOADING',
+            payload: false
+        })
     })
+
     .catch((err) => {
         console.log(err)
     });

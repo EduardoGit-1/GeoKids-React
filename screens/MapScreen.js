@@ -71,7 +71,7 @@ const MapScreen = ({navigation}) => {
         bs.current.snapTo(0)
     }
     const onPOIClick = e =>{
-        console.log(e.nativeEvent)
+
         let designation = e.nativeEvent.name
         designation = designation.replace(/(\r\n|\n|\r)/gm, " ")
         setDestination({
@@ -220,11 +220,12 @@ const MapScreen = ({navigation}) => {
         setClassificationVisibility(false)
 
         navigation.navigate("Opiniões", {destination, userID, stars, isFavorite, answers})
-
+        
     }
     const onEvaluateClick = () =>{
         bs.current.snapTo(1)
         getFavoritePlace(destination.placeID).then(favourite =>{
+            //console.log(favourite)
             if(favourite != null){
                 setClassification(favourite)
             }else{
