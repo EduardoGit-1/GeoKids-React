@@ -17,7 +17,7 @@ const Header = ({title}) => {
                 return(<UploadLogo width = {logoWidth} height = {logoWidth}/>)
             case 'PERCURSOS':
                 return(<TrackingLogo width = {logoWidth} height = {logoHeight}/>)
-            case 'FAVORITOS':
+            case 'LOCAIS':
                 return(<FavoritesLogo width = {logoWidth - 5} height = {logoHeight- 5}/>)
             case 'OPINIÕES':
                 return(<OpinionLogo width = {logoWidth} height = {logoHeight}/>)

@@ -28,7 +28,7 @@ const Navigator = ({Drawer}) => {
             <TrackingLogo width ={50} height = {50}/>
           )
         }}/>
-        <Drawer.Screen name="Favoritos" component={FavoriteScreen} options ={{
+        <Drawer.Screen name="Locais" component={FavoriteScreen} options ={{
           drawerIcon:() => (
             <FavoritesLogo width ={50} height = {50}/>
           )

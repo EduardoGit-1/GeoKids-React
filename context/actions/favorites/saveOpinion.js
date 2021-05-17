@@ -17,7 +17,7 @@ const registerOpinion = (opinion, navigation) => (dispatch) =>{
         })
     }).then(() =>{
 
-        navigation.navigate("Favoritos") ;
+        navigation.navigate("Locais") ;
     })
     .catch((err) => {
         console.log(err)

@@ -20,7 +20,7 @@ const FavoriteScreen = ({navigation}) =>{
         <View style = {styles.container}>
             <StatusBar hidden />
             <BackGround/>
-            <Header title ="FAVORITOS"/>
+            <Header title ='LOCAIS'/>
             <View style = {styles.placeContainer}>
                 <FlatList
                     style = {styles.scrollView} 

@@ -51,6 +51,13 @@ const MapScreen = ({navigation}) => {
         Geocoder.from(e.nativeEvent.coordinate.latitude, e.nativeEvent.coordinate.longitude)
 		.then((json) => {
         	var designation = json.results[3].formatted_address;
+            //let cityObject = json.results[3].address_components.find(address_component => address_component.types[0] === "administrative_area_level_1" && address_component.types[1] === "political")
+            //let cityObject = json.results.find(item => item.address_components.find(address_component => address_component.types[0] === "administrative_area_level_1" && address_component.types[1] === "political"))
+            const localityObject = json.results[0].address_components.filter((obj) => {
+                return obj.types.includes('administrative_area_level_1');
+              });
+            const city = localityObject.long_name;
+            console.log(localityObject)
             designation = designation.replace(/(\r\n|\n|\r)/gm, " ")
             setDestination(prevState => ({
                 ...prevState,
