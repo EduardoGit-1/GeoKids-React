@@ -45,7 +45,7 @@ const OpinionScreen = ({navigation, route}) =>{
     }
     return(
         <View style = {styles.container}>
-            <StatusBar hidden />
+            <StatusBar hidden = {true} />
             <BackGround/>
             <Header title = "OPINIÕES"/>
             <Text style = {styles.title}>{destination.designation}</Text>

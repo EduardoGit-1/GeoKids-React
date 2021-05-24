@@ -6,7 +6,8 @@ const devEnironmentVariables = {
 }
 
 const prodEnvironmentVariables = {
-
+    DEV_BACKEND_URL,
+    GOOGLE_API_KEY
 }
 
 export default __DEV__ ? devEnironmentVariables : prodEnvironmentVariables

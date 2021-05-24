@@ -4,8 +4,9 @@
     "slug": "GeoKids",
     "version": "1.0.0",
     "orientation": "portrait",
+    "icon": "./assets/logos/geokidsLogo.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/logos/geokidsLogo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -18,11 +19,20 @@
     "ios": {
       "supportsTablet": true
     },
+    "androidStatusBar": {
+      "hidden": true
+    },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/logos/geokidsLogo.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyCM7K4DnUmRJVGMwVWs9yxSQgGydHAtWVg"
+        }
+      },
+      "package": "com.eduardod9.GeoKids"
     },
     "web": {
       "favicon": "./assets/favicon.png"

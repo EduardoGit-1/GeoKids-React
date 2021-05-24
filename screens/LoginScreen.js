@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
+import {View, Text, StyleSheet, Image, StatusBar} from 'react-native';
 import Character from '../components/Login/SelectCharacter/SelectCharacter'
 import InsertNickname from '../components/Login/InsertNickName/InsertNickname'
 import BackGround from '../components/Common/BackGround'
@@ -63,6 +63,7 @@ const Login = ({Drawer}) =>{
     return(
         <View style = {styles.index}>
             <BackGround/>
+            <StatusBar hidden = {true} />
             <WarningModal 
                 text = "A alcunha já está a ser usada!"
                 modalVisible = {modalVisible} 

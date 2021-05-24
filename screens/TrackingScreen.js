@@ -19,7 +19,7 @@ const TrackingScreen = ({navigation}) =>{
 
     return(
         <View style = {styles.container}>
-            <StatusBar hidden />
+            <StatusBar hidden = {true} />
             <BackGround/>
             <Header title ="PERCURSOS"/>
             <View style = {{height: 590}}>

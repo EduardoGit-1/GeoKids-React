@@ -18,7 +18,7 @@ const FavoriteScreen = ({navigation}) =>{
 
     return(
         <View style = {styles.container}>
-            <StatusBar hidden />
+            <StatusBar hidden = {true} />
             <BackGround/>
             <Header title ='LOCAIS'/>
             <View style = {styles.placeContainer}>

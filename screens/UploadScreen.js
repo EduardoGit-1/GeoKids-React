@@ -152,7 +152,7 @@ const UploadScreen = ({navigation, route}) =>{
 
     return(
         <View style = {styles.container}>
-            <StatusBar hidden />
+            <StatusBar hidden = {true} />
             <BackGround/>
             <Header title ="UPLOADS"/>
             <UploadPopup 

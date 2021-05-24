@@ -268,7 +268,7 @@ const MapScreen = ({navigation}) => {
     }
     return(
         <View style = {styles.container}>
-            <StatusBar hidden />
+            <StatusBar hidden = {true} />
             <BackGround/>
             <Header title ="MAPA"/>
             {classification != null ? <ClassificationPopUp destination = {destination} isVisible = {classificatonVisibily} classification = {classification} onOpinionClick = {onOpinionClick} onCancel = {onEvaluationBack}/>: null}
